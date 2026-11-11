@@ -1,0 +1,2945 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Портал СМУС</title>
+    <style>
+        /* ===== ГЛОБАЛЬНЫЕ СТИЛИ ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            background-color: #eef2f7;
+            color: #1e293b;
+            padding: 20px;
+        }
+        .app {
+            max-width: 1360px;
+            margin: 0 auto;
+            background: #f8fafc;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(37,99,235,0.08);
+            overflow: hidden;
+            min-height: 90vh;
+            position: relative;
+        }
+
+        /* ===== ВЕРХНЯЯ ПАНЕЛЬ ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 28px;
+            background: #ffffff;
+            border-bottom: 1px solid #dbeafe;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        .logo-text {
+            font-weight: 700;
+            font-size: 17px;
+            color: #1e293b;
+        }
+        .logo-text span { color: #2563eb; }
+        .nav {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav a {
+            text-decoration: none;
+            color: #475569;
+            font-weight: 500;
+            font-size: 13px;
+            transition: 0.2s;
+            padding: 5px 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .nav a:hover { background: #dbeafe; color: #2563eb; }
+        .nav a.active { background: #2563eb20; color: #2563eb; }
+        .nav a.hidden-nav { display: none; }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header-badge {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #2563eb15;
+            padding: 4px 12px 4px 8px;
+            border-radius: 40px;
+            border: 1px solid #2563eb30;
+            font-weight: 600;
+            font-size: 12px;
+            color: #2563eb;
+        }
+        .header-badge .coin { font-size: 14px; }
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #f1f5f9;
+            padding: 4px 12px 4px 8px;
+            border-radius: 40px;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .user-badge:hover { background: #e2e8f0; }
+        .user-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        .search-icon {
+            font-size: 16px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+        .search-icon:hover { background: #dbeafe; }
+        .notif-icon {
+            font-size: 16px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 50%;
+            transition: 0.2s;
+            position: relative;
+        }
+        .notif-icon:hover { background: #dbeafe; }
+        .notif-dot {
+            position: absolute;
+            top: 2px;
+            right: 4px;
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
+
+        /* ===== КОНТЕНТ ===== */
+        .content { padding: 20px 28px 32px; }
+
+        /* ===== СТРАНИЦЫ ===== */
+        .page { display: none; animation: fadeIn 0.3s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ===== ПОДСТРАНИЦЫ BI ===== */
+        .bi-subpage { display: none; }
+        .bi-subpage.active { display: block; animation: fadeIn 0.3s ease; }
+
+        /* ===== ПЕРЕКЛЮЧАТЕЛЬ BI ===== */
+        .bi-switcher {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+            background: #ffffff;
+            padding: 6px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            width: fit-content;
+            flex-wrap: wrap;
+        }
+        .bi-switcher button {
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: 0.25s;
+            background: transparent;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .bi-switcher button:hover { background: #f1f5f9; color: #2563eb; }
+        .bi-switcher button.active {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+        }
+
+        /* ============================================================ */
+        /* ===== ОНБОРДИНГ ===== */
+        /* ============================================================ */
+        .onboarding-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.4s ease;
+        }
+        .onboarding-overlay.open { display: flex; }
+        .onboarding-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 40px 48px;
+            max-width: 540px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 32px 80px rgba(0,0,0,0.3);
+            animation: slideUp 0.4s ease;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .onboarding-card .step-indicator {
+            font-size: 12px; color: #94a3b8; font-weight: 500;
+            margin-bottom: 8px; letter-spacing: 1px;
+        }
+        .onboarding-card .icon { font-size: 56px; display: block; margin-bottom: 12px; }
+        .onboarding-card h2 { font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+        .onboarding-card p { font-size: 15px; color: #64748b; line-height: 1.6; margin-bottom: 20px; }
+        .onboarding-card .dots { display: flex; gap: 8px; justify-content: center; margin-bottom: 20px; }
+        .onboarding-card .dots span {
+            width: 10px; height: 10px; border-radius: 50%;
+            background: #e2e8f0; transition: 0.3s;
+        }
+        .onboarding-card .dots span.active { background: #2563eb; width: 28px; border-radius: 10px; }
+        .onboarding-card .btn-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .onboarding-card .btn-row .btn {
+            padding: 10px 32px; border-radius: 40px; font-weight: 600;
+            font-size: 15px; border: none; cursor: pointer; transition: 0.2s;
+        }
+        .onboarding-card .btn-row .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #3b82f6); color: #fff;
+        }
+        .onboarding-card .btn-row .btn-primary:hover {
+            transform: scale(1.02); box-shadow: 0 4px 16px rgba(37,99,235,0.3);
+        }
+
+        /* ============================================================ */
+        /* ===== ГЛАВНАЯ ===== */
+        /* ============================================================ */
+        .main-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 40%, #2563eb 100%);
+            border-radius: 18px; padding: 28px 32px; margin-bottom: 16px;
+            color: #fff; position: relative; overflow: hidden;
+        }
+        .main-hero::after {
+            content: ''; position: absolute; top: -50%; right: -10%;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(59,130,246,0.2) 0%, transparent 70%);
+            border-radius: 50%; pointer-events: none;
+        }
+        .main-hero .hero-content { position: relative; z-index: 1; }
+        .main-hero .hero-badge-top {
+            display: inline-block; background: rgba(255,255,255,0.12);
+            padding: 4px 16px; border-radius: 30px; font-size: 12px;
+            color: #93c5fd; border: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 6px; letter-spacing: 0.5px;
+        }
+        .main-hero h1 { font-size: 26px; font-weight: 700; }
+        .main-hero h1 span { color: #93c5fd; }
+        .main-hero .hero-desc {
+            font-size: 14px; color: #bfdbfe; margin-top: 4px;
+            max-width: 680px; line-height: 1.6;
+        }
+        .main-hero .hero-desc strong { color: #fff; }
+        .main-hero .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+        .main-hero .badge-row .badge {
+            background: rgba(255,255,255,0.1); padding: 4px 16px;
+            border-radius: 30px; font-size: 12px; color: #e2e8f0;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .main-hero .badge-row .badge.highlight {
+            background: #2563eb; color: #fff; border-color: #2563eb;
+        }
+
+        .smus-opk-banner {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+            border-radius: 16px; padding: 18px 26px; margin-bottom: 16px;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 14px; color: #fff;
+            box-shadow: 0 4px 20px rgba(37,99,235,0.2);
+            cursor: pointer; transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .smus-opk-banner:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,99,235,0.35); }
+        .smus-opk-banner .left { display: flex; align-items: center; gap: 14px; }
+        .smus-opk-banner .left .icon-box {
+            width: 48px; height: 48px; background: rgba(255,255,255,0.15);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-size: 24px; border: 1px solid rgba(255,255,255,0.2);
+        }
+        .smus-opk-banner .left h3 { font-size: 16px; font-weight: 700; }
+        .smus-opk-banner .left p { font-size: 13px; opacity: 0.9; margin-top: 2px; }
+        .smus-opk-banner .right .btn-opk {
+            background: #ffffff; color: #2563eb; padding: 10px 24px;
+            border-radius: 40px; font-weight: 700; font-size: 14px;
+            border: none; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 8px; white-space: nowrap;
+        }
+        .smus-opk-banner .right .btn-opk:hover { background: rgba(255,255,255,0.9); transform: scale(1.03); }
+
+        .accent-start {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #3b82f6 100%);
+            border-radius: 16px; padding: 20px 26px; margin-bottom: 16px;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 14px; color: #fff;
+            box-shadow: 0 4px 20px rgba(37,99,235,0.25);
+        }
+        .accent-start .left h2 { font-size: 18px; font-weight: 700; }
+        .accent-start .left p { font-size: 13px; opacity: 0.9; margin-top: 2px; }
+        .accent-start .right { display: flex; gap: 10px; flex-wrap: wrap; }
+        .accent-start .right .btn-start {
+            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
+            color: #fff; padding: 8px 20px; border-radius: 40px;
+            font-weight: 600; font-size: 13px; cursor: pointer; transition: 0.3s;
+        }
+        .accent-start .right .btn-start:hover { background: #ffffff; color: #2563eb; transform: scale(1.02); }
+        .accent-start .right .btn-start.primary { background: #ffffff; color: #2563eb; }
+
+        .onboarding-path {
+            background: #ffffff; border-radius: 16px; padding: 20px 24px;
+            margin-bottom: 16px; border: 1px solid #e2e8f0;
+            position: relative; overflow: hidden;
+        }
+        .onboarding-path::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0;
+            height: 4px; background: linear-gradient(90deg, #2563eb, #3b82f6);
+        }
+        .onboarding-path .path-header {
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 10px; margin-bottom: 12px;
+        }
+        .onboarding-path .path-header h2 { font-size: 17px; font-weight: 700; color: #0f172a; }
+        .onboarding-path .path-header .path-badge {
+            background: #2563eb15; color: #2563eb; padding: 4px 14px;
+            border-radius: 30px; font-size: 12px; font-weight: 600;
+            border: 1px solid #2563eb30;
+        }
+        .onboarding-path .path-header .path-badge.completed {
+            background: #2563eb; color: #fff; border-color: #2563eb;
+        }
+        .onboarding-path .progress-container {
+            display: flex; align-items: center; gap: 14px; margin-bottom: 14px;
+        }
+        .onboarding-path .progress-bar {
+            flex: 1; height: 8px; background: #f1f5f9;
+            border-radius: 10px; overflow: hidden;
+        }
+        .onboarding-path .progress-bar .fill {
+            height: 100%; border-radius: 10px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+            transition: width 0.6s ease; width: 0%;
+        }
+        .onboarding-path .progress-text {
+            font-size: 13px; font-weight: 600; color: #2563eb;
+            min-width: 80px; text-align: right;
+        }
+        .path-steps { display: flex; flex-direction: column; gap: 8px; }
+        .path-step {
+            display: flex; align-items: center; gap: 12px;
+            padding: 10px 14px; background: #f8fafc; border-radius: 12px;
+            border: 1px solid #e2e8f0; transition: 0.3s;
+        }
+        .path-step.done { background: #eff6ff; border-color: #2563eb50; }
+        .path-step.done .step-check { background: #2563eb; color: #fff; border-color: #2563eb; }
+        .path-step .step-check {
+            width: 28px; height: 28px; border-radius: 50%;
+            border: 2px solid #cbd5e1; display: flex; align-items: center;
+            justify-content: center; font-size: 14px; flex-shrink: 0;
+            transition: 0.3s; color: #94a3b8; background: #fff;
+        }
+        .path-step .step-info { flex: 1; }
+        .path-step .step-info h4 { font-size: 13px; font-weight: 500; }
+        .path-step .step-info p { font-size: 12px; color: #64748b; }
+        .path-step .step-action {
+            font-size: 12px; font-weight: 500; color: #2563eb;
+            cursor: pointer; padding: 4px 12px; border-radius: 20px;
+            transition: 0.2s; white-space: nowrap;
+        }
+        .path-step .step-action:hover { background: #2563eb20; }
+        .path-step .step-reward {
+            font-size: 12px; font-weight: 600; color: #f59e0b;
+            min-width: 60px; text-align: right;
+        }
+        .path-step.done .step-reward { color: #2563eb; }
+
+        .news-highlight {
+            display: grid; grid-template-columns: 2fr 1fr;
+            gap: 16px; margin-bottom: 16px;
+        }
+        @media (max-width: 768px) { .news-highlight { grid-template-columns: 1fr; } }
+        .news-highlight .news-block {
+            background: #ffffff; border-radius: 16px; padding: 18px 20px;
+            border: 1px solid #e2e8f0;
+        }
+        .news-highlight .news-block .label {
+            font-size: 11px; font-weight: 600; color: #2563eb;
+            text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;
+        }
+        .news-highlight .news-block h2 {
+            font-size: 16px; font-weight: 600; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .news-highlight .news-block h2 .link {
+            font-size: 12px; font-weight: 500; color: #2563eb; cursor: pointer;
+        }
+        .highlight-item {
+            display: flex; gap: 14px; padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: 0.2s;
+        }
+        .highlight-item:last-child { border-bottom: none; }
+        .highlight-item:hover { background: #f8fafc; margin: 0 -8px; padding: 12px 8px; border-radius: 8px; }
+        .highlight-item .icon { font-size: 28px; flex-shrink: 0; }
+        .highlight-item .content h4 { font-size: 14px; font-weight: 500; }
+        .highlight-item .content p { font-size: 12px; color: #64748b; }
+        .highlight-item .content .tag {
+            display: inline-block; font-size: 10px; font-weight: 600;
+            padding: 2px 10px; border-radius: 20px; margin-top: 4px;
+        }
+        .tag-new { background: #2563eb20; color: #2563eb; }
+        .tag-hot { background: #fef3c7; color: #92400e; }
+
+        .announce-grid { display: flex; flex-direction: column; gap: 8px; }
+        .announce-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 10px 14px; background: #f8fafc; border-radius: 12px;
+            border: 1px solid #e2e8f0; cursor: pointer; transition: 0.2s;
+        }
+        .announce-item:hover { border-color: #2563eb; background: #eff6ff; }
+        .announce-item .date {
+            font-size: 20px; font-weight: 700; color: #2563eb;
+            min-width: 44px; text-align: center; line-height: 1.2;
+        }
+        .announce-item .date .month {
+            font-size: 10px; font-weight: 400; color: #64748b;
+            text-transform: uppercase; display: block;
+        }
+        .announce-item .info { flex: 1; }
+        .announce-item .info h4 { font-size: 13px; font-weight: 500; }
+        .announce-item .info p { font-size: 11px; color: #64748b; }
+        .announce-item .btn-sm {
+            background: linear-gradient(135deg, #2563eb, #3b82f6); color: #fff;
+            border: none; padding: 4px 14px; border-radius: 20px;
+            font-size: 11px; cursor: pointer;
+        }
+        .announce-item .btn-sm:hover { opacity: 0.9; }
+
+        .accent-why {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 14px; margin-bottom: 16px;
+        }
+        @media (max-width: 768px) { .accent-why { grid-template-columns: 1fr; } }
+        .accent-why .item {
+            background: #ffffff; border-radius: 16px; padding: 18px 20px;
+            border: 1px solid #e2e8f0; text-align: center; transition: 0.3s;
+            cursor: pointer; position: relative; overflow: hidden;
+        }
+        .accent-why .item::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0;
+            height: 4px; background: #2563eb; opacity: 0; transition: 0.3s;
+        }
+        .accent-why .item:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(37,99,235,0.12); border-color: #2563eb; }
+        .accent-why .item:hover::before { opacity: 1; }
+        .accent-why .item .icon { font-size: 32px; display: block; margin-bottom: 4px; }
+        .accent-why .item h3 { font-size: 15px; font-weight: 600; color: #0f172a; }
+        .accent-why .item p { font-size: 12px; color: #64748b; margin-top: 2px; }
+        .accent-why .item .highlight-num {
+            display: inline-block; background: #2563eb15; color: #2563eb;
+            font-weight: 700; font-size: 13px; padding: 2px 14px;
+            border-radius: 20px; margin-top: 4px;
+        }
+
+        .main-grid {
+            display: grid; grid-template-columns: 2fr 1fr;
+            gap: 20px; margin-bottom: 16px;
+        }
+        @media (max-width: 768px) { .main-grid { grid-template-columns: 1fr; } }
+        .main-grid .card {
+            background: #ffffff; border-radius: 16px; padding: 16px 18px;
+            border: 1px solid #e2e8f0;
+        }
+        .main-grid .card h2 {
+            font-size: 15px; font-weight: 600; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 6px; color: #0f172a;
+        }
+        .main-grid .card h2 .link {
+            font-size: 11px; font-weight: 500; color: #2563eb;
+            cursor: pointer; margin-left: auto;
+        }
+
+        .info-item {
+            display: flex; align-items: flex-start; gap: 10px;
+            padding: 8px 0; border-bottom: 1px solid #f1f5f9;
+            cursor: pointer; transition: 0.2s;
+        }
+        .info-item:last-child { border-bottom: none; }
+        .info-item:hover { background: #f8fafc; margin: 0 -6px; padding: 8px 6px; border-radius: 8px; }
+        .info-item .icon { font-size: 20px; }
+        .info-item .text h4 { font-size: 13px; font-weight: 500; }
+        .info-item .text p { font-size: 12px; color: #64748b; }
+
+        .initiative-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .initiative-btn {
+            background: #f1f5f9; border: 1px solid #e2e8f0;
+            border-radius: 12px; padding: 12px 10px; text-align: center;
+            cursor: pointer; transition: 0.2s; font-size: 12px;
+            font-weight: 500; color: #0f172a;
+        }
+        .initiative-btn:hover { background: #2563eb; color: #fff; border-color: #2563eb; transform: translateY(-2px); }
+        .initiative-btn .icon { font-size: 22px; display: block; margin-bottom: 2px; }
+
+        .resource-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .resource-item {
+            background: #f8fafc; border: 1px solid #e2e8f0;
+            border-radius: 12px; padding: 12px 10px; text-align: center;
+            cursor: pointer; transition: 0.2s;
+        }
+        .resource-item:hover { border-color: #2563eb; transform: translateY(-2px); }
+        .resource-item .icon { font-size: 24px; display: block; }
+        .resource-item h4 { font-size: 12px; margin: 2px 0; color: #0f172a; }
+        .resource-item p { font-size: 10px; color: #64748b; }
+
+        .my-day {
+            background: #ffffff; border-radius: 16px; padding: 18px 22px;
+            margin-bottom: 16px; border: 1px solid #e2e8f0;
+        }
+        .my-day .header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 0 10px 0; border-bottom: 1px solid #f1f5f9;
+            background: transparent;
+        }
+        .my-day .header h2 { font-size: 16px; font-weight: 600; color: #0f172a; }
+        .my-day .header .date { font-size: 13px; color: #64748b; }
+        .my-day .timeline { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+        .my-day .timeline .item {
+            display: flex; align-items: center; gap: 14px;
+            padding: 10px 14px; background: #f8fafc; border-radius: 10px;
+            border-left: 4px solid #2563eb; transition: 0.2s; cursor: pointer;
+        }
+        .my-day .timeline .item:hover { background: #eff6ff; }
+        .my-day .timeline .item .time {
+            font-size: 12px; font-weight: 600; color: #2563eb; min-width: 55px;
+        }
+        .my-day .timeline .item .info { flex: 1; }
+        .my-day .timeline .item .info h4 { font-size: 13px; font-weight: 500; }
+        .my-day .timeline .item .info p { font-size: 12px; color: #64748b; }
+        .my-day .timeline .item .badge {
+            font-size: 10px; font-weight: 600; padding: 2px 10px; border-radius: 20px;
+        }
+        .badge-event { background: #2563eb20; color: #2563eb; }
+        .badge-task { background: #fef3c7; color: #92400e; }
+        .badge-deadline { background: #fee2e2; color: #dc2626; }
+        .badge-webinar { background: #dbeafe; color: #2563eb; }
+
+        .recommendations {
+            background: #ffffff; border-radius: 16px; padding: 18px 22px;
+            margin-bottom: 16px; border: 1px solid #e2e8f0;
+        }
+        .recommendations h2 { font-size: 16px; font-weight: 600; margin-bottom: 10px; color: #0f172a; }
+        .recommendations .rec-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px;
+        }
+        .recommendations .rec-item {
+            background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;
+            padding: 14px; text-align: center; transition: 0.2s; cursor: pointer;
+        }
+        .recommendations .rec-item:hover { border-color: #2563eb; transform: translateY(-3px); }
+        .recommendations .rec-item .icon { font-size: 28px; display: block; margin-bottom: 4px; }
+        .recommendations .rec-item h4 { font-size: 13px; font-weight: 500; }
+        .recommendations .rec-item p { font-size: 11px; color: #64748b; }
+        .recommendations .rec-item .tag-rec {
+            display: inline-block; font-size: 9px; font-weight: 600;
+            padding: 2px 8px; border-radius: 12px; background: #2563eb20;
+            color: #2563eb; margin-top: 4px;
+        }
+
+        .poll-widget {
+            background: #ffffff; border-radius: 16px; padding: 16px 20px;
+            margin-bottom: 16px; border: 1px solid #e2e8f0;
+        }
+        .poll-widget .poll-header {
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 8px; flex-wrap: wrap;
+        }
+        .poll-widget .poll-header h2 { font-size: 15px; font-weight: 600; color: #0f172a; }
+        .poll-widget .poll-header span { font-size: 12px; color: #64748b; }
+        .poll-options { display: flex; gap: 8px; flex-wrap: wrap; }
+        .poll-options .option {
+            display: flex; align-items: center; gap: 8px;
+            padding: 6px 14px 6px 12px; background: #f8fafc; border-radius: 20px;
+            border: 1px solid #e2e8f0; cursor: pointer; transition: 0.2s;
+            flex: 1; min-width: 120px;
+        }
+        .poll-options .option:hover { border-color: #2563eb; background: #eff6ff; }
+        .poll-options .option .bar {
+            flex: 1; height: 4px; background: #e2e8f0;
+            border-radius: 10px; overflow: hidden; min-width: 40px;
+        }
+        .poll-options .option .bar .fill {
+            height: 100%; border-radius: 10px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+            transition: width 0.6s ease;
+        }
+        .poll-options .option .perc {
+            font-size: 11px; font-weight: 600; color: #2563eb;
+            min-width: 35px; text-align: right;
+        }
+        .poll-options .option span:first-child {
+            font-size: 12px; font-weight: 500; white-space: nowrap;
+        }
+
+        .faq-section {
+            margin-top: 0; display: grid;
+            grid-template-columns: 2fr 1fr; gap: 20px;
+        }
+        @media (max-width: 768px) { .faq-section { grid-template-columns: 1fr; } }
+        .faq-block {
+            background: #ffffff; border-radius: 16px; padding: 18px 20px;
+            border: 1px solid #e2e8f0;
+        }
+        .faq-block h3 {
+            font-size: 16px; font-weight: 600; margin-bottom: 12px;
+            display: flex; align-items: center; gap: 8px; color: #0f172a;
+        }
+        .faq-item { border-bottom: 1px solid #f1f5f9; padding: 10px 0; }
+        .faq-item:last-child { border-bottom: none; }
+        .faq-item .question {
+            display: flex; justify-content: space-between; align-items: center;
+            cursor: pointer; font-weight: 500; font-size: 14px; transition: 0.2s;
+        }
+        .faq-item .question:hover { color: #2563eb; }
+        .faq-item .question .arrow { transition: 0.3s; font-size: 18px; color: #94a3b8; }
+        .faq-item .question .arrow.open { transform: rotate(180deg); }
+        .faq-item .answer {
+            max-height: 0; overflow: hidden; transition: 0.3s ease;
+            font-size: 13px; color: #64748b; line-height: 1.5; padding-top: 0;
+        }
+        .faq-item .answer.open { max-height: 200px; padding-top: 8px; }
+
+        .mentor-block {
+            background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+            border-radius: 16px; padding: 18px 20px;
+            border: 1px solid #2563eb30; text-align: center;
+        }
+        .mentor-block .avatar {
+            width: 64px; height: 64px; border-radius: 50%;
+            background: #2563eb20; color: #2563eb;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px; font-weight: 700; margin: 0 auto 8px;
+        }
+        .mentor-block h4 { font-size: 16px; font-weight: 600; }
+        .mentor-block p { font-size: 13px; color: #64748b; margin: 2px 0 10px; }
+        .mentor-block .btn-mentor {
+            background: linear-gradient(135deg, #2563eb, #3b82f6); color: #fff;
+            border: none; padding: 8px 28px; border-radius: 30px;
+            font-weight: 600; font-size: 13px; cursor: pointer; transition: 0.2s;
+        }
+        .mentor-block .btn-mentor:hover { opacity: 0.9; transform: scale(1.02); }
+
+        /* ============================================================ */
+        /* ===== ДЕЙСТВУЙ ===== */
+        /* ============================================================ */
+        .greeting {
+            margin-bottom: 16px; display: flex; justify-content: space-between;
+            align-items: flex-start; flex-wrap: wrap; gap: 10px;
+        }
+        .greeting h1 { font-size: 22px; font-weight: 700; color: #0f172a; }
+        .greeting h1 small { font-weight: 400; font-size: 14px; color: #64748b; display: block; margin-top: 2px; }
+        .greeting-role {
+            background: #2563eb15; padding: 5px 14px; border-radius: 40px;
+            font-size: 12px; color: #2563eb; font-weight: 500;
+            border: 1px solid #2563eb30; white-space: nowrap;
+        }
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 10px; margin-bottom: 16px;
+        }
+        @media (max-width: 768px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
+        .stat-card {
+            background: #ffffff; border-radius: 14px; padding: 12px 14px;
+            border: 1px solid #e2e8f0; text-align: center; transition: 0.2s;
+        }
+        .stat-card:hover { border-color: #2563eb; }
+        .stat-card .num { font-size: 22px; font-weight: 700; color: #2563eb; }
+        .stat-card .label { font-size: 11px; color: #64748b; margin-top: 2px; }
+        .stat-card .sub { font-size: 10px; color: #94a3b8; margin-top: 2px; }
+
+        .dashboard-grid {
+            display: grid; grid-template-columns: 2fr 1fr;
+            gap: 18px; margin-bottom: 16px;
+        }
+        @media (max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
+        .card {
+            background: #ffffff; border-radius: 16px; padding: 16px 18px;
+            border: 1px solid #e2e8f0;
+        }
+        .card h2 {
+            font-size: 15px; font-weight: 600; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+            color: #0f172a;
+        }
+        .card h2 .link { font-size: 11px; font-weight: 500; color: #2563eb; cursor: pointer; }
+        .card h2 .link:hover { text-decoration: underline; }
+
+        .quick-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        @media (max-width: 600px) { .quick-actions { grid-template-columns: 1fr 1fr; } }
+        .quick-btn {
+            background: #f1f5f9; border: 1px solid #e2e8f0;
+            border-radius: 12px; padding: 10px 8px; text-align: center;
+            font-weight: 500; font-size: 11px; color: #0f172a;
+            cursor: pointer; transition: 0.2s;
+        }
+        .quick-btn:hover { background: #2563eb; color: #fff; border-color: #2563eb; transform: translateY(-2px); }
+        .quick-btn .icon { display: block; font-size: 20px; margin-bottom: 2px; }
+
+        .event-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 6px 0; border-bottom: 1px solid #f1f5f9;
+            cursor: pointer; font-size: 12px;
+        }
+        .event-item:last-child { border-bottom: none; }
+        .event-item:hover { background: #f8fafc; margin: 0 -6px; padding: 6px; border-radius: 6px; }
+        .event-title { font-weight: 500; }
+        .event-meta { font-size: 11px; color: #64748b; }
+        .event-badge {
+            background: #2563eb20; color: #2563eb; font-size: 10px;
+            font-weight: 600; padding: 2px 10px; border-radius: 20px;
+            cursor: pointer; transition: 0.2s; white-space: nowrap;
+        }
+        .event-badge:hover { background: #2563eb; color: #fff; }
+
+        .exchange-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px; margin-top: 6px;
+        }
+        .exchange-item {
+            background: #f8fafc; border: 1px solid #e2e8f0;
+            border-radius: 12px; padding: 12px; text-align: center;
+            transition: 0.2s; cursor: pointer;
+        }
+        .exchange-item:hover { border-color: #2563eb; transform: translateY(-2px); }
+        .exchange-item .icon { font-size: 24px; display: block; }
+        .exchange-item .name { font-weight: 500; font-size: 12px; margin: 2px 0; }
+        .exchange-item .price { color: #2563eb; font-weight: 600; font-size: 12px; }
+        .exchange-item .btn-ex {
+            margin-top: 4px; background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #fff; border: none; padding: 3px 14px;
+            border-radius: 20px; font-size: 11px; cursor: pointer;
+        }
+        .exchange-item .btn-ex:hover { opacity: 0.9; }
+
+        .role-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #eff6ff; border: 1px solid #2563eb30;
+            border-radius: 30px; padding: 4px 14px 4px 10px;
+            font-size: 12px; font-weight: 500; color: #1e3a5f;
+        }
+        .role-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: #2563eb; }
+        .role-badge .change { color: #2563eb; cursor: pointer; font-weight: 600; font-size: 11px; }
+        .role-badge .change:hover { text-decoration: underline; }
+
+        .collab-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px;
+        }
+        .collab-item {
+            background: #f8fafc; border: 1px solid #e2e8f0;
+            border-radius: 12px; padding: 14px 12px; text-align: center;
+            cursor: pointer; transition: 0.2s;
+        }
+        .collab-item:hover { border-color: #2563eb; transform: translateY(-2px); }
+        .collab-item .icon { font-size: 28px; display: block; }
+        .collab-item h4 { font-size: 12px; margin: 2px 0; }
+        .collab-item p { font-size: 10px; color: #64748b; }
+
+        /* ============================================================ */
+        /* ===== ПРОФИЛЬ ЧЛЕНА СМУС ===== */
+        /* ============================================================ */
+        .member-search {
+            background: #ffffff; border-radius: 16px; padding: 16px 18px;
+            border: 1px solid #e2e8f0; margin-bottom: 16px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .member-search input {
+            flex: 1; padding: 10px 16px; border: 1px solid #cbd5e1;
+            border-radius: 30px; font-size: 14px; transition: 0.2s;
+        }
+        .member-search input:focus {
+            border-color: #2563eb; outline: none;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+        .member-search .search-btn {
+            background: linear-gradient(135deg, #2563eb, #3b82f6); color: #fff;
+            border: none; padding: 10px 24px; border-radius: 30px;
+            font-weight: 600; cursor: pointer; font-size: 13px; transition: 0.2s;
+        }
+        .member-search .search-btn:hover { opacity: 0.9; }
+
+        .profile-full { display: grid; grid-template-columns: 280px 1fr; gap: 24px; }
+        @media (max-width: 768px) { .profile-full { grid-template-columns: 1fr; } }
+        .profile-sidebar {
+            background: #ffffff; border-radius: 16px; padding: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        .profile-sidebar .avatar-big {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb, #3b82f6); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px; font-weight: 700; margin: 0 auto 10px;
+        }
+        .profile-sidebar h3 { text-align: center; font-size: 18px; color: #0f172a; }
+        .profile-sidebar .position { text-align: center; color: #64748b; font-size: 13px; }
+        .profile-sidebar .division { text-align: center; color: #2563eb; font-size: 13px; font-weight: 500; margin-top: 2px; }
+        .profile-sidebar .stats-mini {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 12px 0;
+        }
+        .profile-sidebar .stats-mini .stat {
+            background: #f8fafc; padding: 10px; border-radius: 10px; text-align: center;
+        }
+        .profile-sidebar .stats-mini .stat .num { font-size: 20px; font-weight: 700; color: #2563eb; }
+        .profile-sidebar .stats-mini .stat .lbl { font-size: 10px; color: #64748b; }
+        .profile-sidebar .level-badge {
+            text-align: center; padding: 10px; background: #eff6ff;
+            border-radius: 10px; border: 1px solid #2563eb30; margin: 10px 0;
+        }
+        .profile-sidebar .level-badge .title { font-weight: 600; color: #1e3a5f; }
+        .profile-sidebar .level-badge .sub { font-size: 12px; color: #64748b; }
+        .profile-sidebar .interests-grid {
+            display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px;
+        }
+        .interest-tag {
+            background: #f1f5f9; border: 1px solid #e2e8f0;
+            border-radius: 20px; padding: 3px 12px; font-size: 11px;
+            cursor: pointer; transition: 0.2s;
+        }
+        .interest-tag:hover { background: #2563eb20; border-color: #2563eb; }
+        .interest-tag.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+
+        .profile-content {
+            background: #ffffff; border-radius: 16px; padding: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        .profile-tabs {
+            display: flex; gap: 4px; margin-bottom: 16px;
+            border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; flex-wrap: wrap;
+        }
+        .profile-tabs .tab {
+            padding: 6px 16px; border-radius: 20px 20px 0 0;
+            font-size: 13px; font-weight: 500; cursor: pointer;
+            transition: 0.2s; color: #64748b;
+        }
+        .profile-tabs .tab:hover { background: #f1f5f9; color: #0f172a; }
+        .profile-tabs .tab.active { background: #2563eb; color: #fff; }
+        .profile-tab-content { display: none; }
+        .profile-tab-content.active { display: block; }
+
+        .career-track {
+            display: flex; flex-direction: column; gap: 0;
+            position: relative; padding-left: 30px;
+        }
+        .career-track::before {
+            content: ''; position: absolute; left: 10px; top: 20px;
+            bottom: 20px; width: 3px; background: #e2e8f0;
+        }
+        .career-step {
+            position: relative; padding: 14px 18px; background: #f8fafc;
+            border-radius: 12px; margin-bottom: 8px; border: 1px solid #e2e8f0;
+            transition: 0.3s; cursor: pointer;
+        }
+        .career-step:hover { border-color: #2563eb; background: #eff6ff; }
+        .career-step .circle {
+            position: absolute; left: -24px; top: 14px;
+            width: 18px; height: 18px; border-radius: 50%;
+            background: #e2e8f0; border: 3px solid #fff;
+            box-shadow: 0 0 0 2px #e2e8f0;
+        }
+        .career-step.active .circle { background: #2563eb; box-shadow: 0 0 0 2px #2563eb; }
+        .career-step.completed .circle { background: #2563eb; box-shadow: 0 0 0 2px #2563eb; }
+        .career-step .step-header {
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 6px;
+        }
+        .career-step .step-header h4 { font-size: 14px; font-weight: 600; }
+        .career-step .step-header .status {
+            font-size: 11px; font-weight: 600; padding: 2px 12px; border-radius: 20px;
+        }
+        .status-current { background: #2563eb20; color: #2563eb; }
+        .status-done { background: #d1fae5; color: #065f46; }
+        .status-locked { background: #f1f5f9; color: #94a3b8; }
+        .career-step .step-details { font-size: 12px; color: #64748b; margin-top: 4px; }
+        .career-step .step-bonus { font-size: 12px; font-weight: 600; color: #f59e0b; margin-top: 4px; }
+
+        .badges-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px;
+        }
+        .badge-item {
+            background: #f8fafc; border: 1px solid #e2e8f0;
+            border-radius: 14px; padding: 16px 12px; text-align: center;
+            transition: 0.2s; cursor: pointer;
+        }
+        .badge-item:hover { border-color: #2563eb; transform: translateY(-3px); }
+        .badge-item .icon { font-size: 36px; display: block; }
+        .badge-item h4 { font-size: 12px; font-weight: 500; margin: 4px 0 2px; }
+        .badge-item p { font-size: 10px; color: #64748b; }
+        .badge-item.locked { opacity: 0.4; }
+        .badge-item.locked .icon { filter: grayscale(1); }
+
+        .portfolio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        @media (max-width: 768px) { .portfolio-grid { grid-template-columns: 1fr; } }
+        .portfolio-item {
+            background: #f8fafc; border: 1px solid #e2e8f0;
+            border-radius: 12px; padding: 14px 16px; transition: 0.2s; cursor: pointer;
+        }
+        .portfolio-item:hover { border-color: #2563eb; }
+        .portfolio-item .icon { font-size: 24px; display: inline-block; margin-right: 8px; }
+        .portfolio-item h4 { font-size: 13px; font-weight: 500; display: inline; }
+        .portfolio-item p { font-size: 12px; color: #64748b; margin-top: 4px; }
+        .portfolio-item .date { font-size: 11px; color: #94a3b8; }
+
+        /* ============================================================ */
+        /* ===== КАЛЕНДАРЬ ===== */
+        /* ============================================================ */
+        .calendar-tabs {
+            display: flex; gap: 4px; margin-bottom: 16px;
+            border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; flex-wrap: wrap;
+        }
+        .calendar-tabs .tab {
+            padding: 6px 16px; border-radius: 20px 20px 0 0;
+            font-size: 13px; font-weight: 500; cursor: pointer;
+            transition: 0.2s; color: #64748b;
+        }
+        .calendar-tabs .tab:hover { background: #f1f5f9; color: #0f172a; }
+        .calendar-tabs .tab.active { background: #2563eb; color: #fff; }
+        .calendar-tab-content { display: none; }
+        .calendar-tab-content.active { display: block; }
+
+        .calendar-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px;
+        }
+        .cal-item {
+            background: #f8fafc; border: 1px solid #e2e8f0;
+            border-radius: 14px; padding: 10px 12px; cursor: pointer;
+            transition: 0.2s; text-align: center;
+        }
+        .cal-item:hover { border-color: #2563eb; background: #eff6ff; transform: translateY(-2px); }
+        .cal-item .day { font-size: 22px; font-weight: 700; color: #2563eb; }
+        .cal-item .month { font-size: 10px; color: #64748b; text-transform: uppercase; }
+        .cal-item .title { font-weight: 500; font-size: 12px; margin: 4px 0 2px; }
+        .cal-item .type { font-size: 10px; color: #94a3b8; }
+        .cal-item .btn-sm {
+            margin-top: 4px; background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #fff; border: none; padding: 2px 10px;
+            border-radius: 20px; font-size: 10px; cursor: pointer;
+        }
+        .cal-item .btn-sm:hover { opacity: 0.9; }
+        .cal-item .btn-outlook {
+            margin-top: 2px; background: transparent; color: #2563eb;
+            border: 1px solid #2563eb; padding: 2px 10px;
+            border-radius: 20px; font-size: 9px; cursor: pointer;
+        }
+        .cal-item .btn-outlook:hover { background: #2563eb; color: #fff; }
+
+        .webinar-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px;
+        }
+        .webinar-card {
+            background: #f8fafc; border: 1px solid #e2e8f0;
+            border-radius: 14px; padding: 16px; transition: 0.2s; cursor: pointer;
+        }
+        .webinar-card:hover { border-color: #2563eb; transform: translateY(-3px); }
+        .webinar-card .icon { font-size: 32px; display: block; margin-bottom: 4px; }
+        .webinar-card h4 { font-size: 14px; font-weight: 500; }
+        .webinar-card p { font-size: 12px; color: #64748b; }
+        .webinar-card .date { font-size: 11px; color: #94a3b8; }
+
+        .review-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
+        .review-item:last-child { border-bottom: none; }
+        .review-item .avatar {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: #2563eb20; color: #2563eb;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 14px; flex-shrink: 0;
+        }
+        .review-item .info h4 { font-size: 13px; font-weight: 500; }
+        .review-item .info .stars { color: #f59e0b; font-size: 14px; }
+        .review-item .info p { font-size: 12px; color: #64748b; }
+        .review-item .info .date { font-size: 10px; color: #94a3b8; }
+
+        /* ============================================================ */
+        /* ===== БАНК ИДЕЙ ===== */
+        /* ============================================================ */
+        .idea-form {
+            background: #f8fafc; padding: 18px; border-radius: 14px;
+            margin-bottom: 20px; border: 1px solid #e2e8f0;
+        }
+        .idea-form input, .idea-form select, .idea-form textarea {
+            width: 100%; padding: 9px 14px; margin-bottom: 10px;
+            border: 1px solid #cbd5e1; border-radius: 10px;
+            font-size: 13px; transition: 0.2s;
+        }
+        .idea-form input:focus, .idea-form select:focus, .idea-form textarea:focus {
+            border-color: #2563eb; outline: none;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+        .idea-form textarea { min-height: 70px; resize: vertical; }
+        .idea-form button {
+            background: linear-gradient(135deg, #2563eb, #3b82f6); color: #fff;
+            border: none; padding: 9px 28px; border-radius: 30px;
+            font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 13px;
+        }
+        .idea-form button:hover { opacity: 0.9; transform: translateY(-2px); }
+        .idea-list .idea-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 0; border-bottom: 1px solid #e2e8f0;
+            cursor: pointer; transition: 0.2s;
+        }
+        .idea-list .idea-item:hover { background: #f8fafc; margin: 0 -8px; padding: 10px 8px; border-radius: 8px; }
+        .idea-item-left { display: flex; align-items: center; gap: 10px; }
+        .idea-like {
+            cursor: pointer; font-size: 16px; transition: 0.2s;
+            color: #94a3b8; user-select: none;
+        }
+        .idea-like:hover { transform: scale(1.2); }
+        .idea-like.liked { color: #2563eb; }
+        .idea-status {
+            font-size: 11px; font-weight: 600; padding: 3px 12px;
+            border-radius: 20px; white-space: nowrap;
+        }
+        .status-new { background: #e2e8f0; color: #475569; }
+        .status-review { background: #fef3c7; color: #92400e; }
+        .status-approved { background: #d1fae5; color: #065f46; }
+        .status-done { background: #2563eb30; color: #2563eb; }
+
+        /* ============================================================ */
+        /* ===== ЧАТ ===== */
+        /* ============================================================ */
+        .chat-container { display: flex; gap: 14px; flex-wrap: wrap; }
+        .chat-channels {
+            min-width: 140px; background: #f8fafc; padding: 8px 10px;
+            border-radius: 12px; border: 1px solid #e2e8f0;
+        }
+        .chat-channels .channel {
+            padding: 5px 8px; border-radius: 8px; cursor: pointer;
+            transition: 0.2s; font-size: 12px;
+        }
+        .chat-channels .channel:hover { background: #e2e8f0; }
+        .chat-channels .channel.active { background: #2563eb20; color: #2563eb; font-weight: 500; }
+        .chat-messages {
+            flex: 1; background: #f8fafc; padding: 12px;
+            border-radius: 12px; min-height: 200px; border: 1px solid #e2e8f0;
+        }
+        .msg {
+            padding: 6px 12px; background: #fff; border-radius: 10px;
+            margin-bottom: 5px; border: 1px solid #e2e8f0; font-size: 12px;
+        }
+        .msg .name { font-weight: 600; font-size: 11px; }
+        .msg .time { font-size: 10px; color: #94a3b8; float: right; }
+        .chat-input { display: flex; gap: 6px; margin-top: 8px; }
+        .chat-input input {
+            flex: 1; padding: 6px 12px; border: 1px solid #cbd5e1;
+            border-radius: 30px; font-size: 12px;
+        }
+        .chat-input input:focus { border-color: #2563eb; outline: none; }
+        .chat-input button {
+            background: linear-gradient(135deg, #2563eb, #3b82f6); color: #fff;
+            border: none; padding: 6px 16px; border-radius: 30px;
+            cursor: pointer; font-size: 12px;
+        }
+
+        /* ============================================================ */
+        /* ===== БИБЛИОТЕКА ===== */
+        /* ============================================================ */
+        .library-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 768px) { .library-grid { grid-template-columns: 1fr; } }
+        .library-section {
+            background: #ffffff; border-radius: 16px; padding: 18px 20px;
+            border: 1px solid #e2e8f0;
+        }
+        .library-section h2 {
+            font-size: 16px; font-weight: 600; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 8px; color: #0f172a;
+        }
+        .library-section .badge-free { background: #2563eb20; color: #2563eb; font-size: 10px; font-weight: 600; padding: 2px 10px; border-radius: 20px; }
+        .library-section .badge-paid { background: #fef3c7; color: #92400e; font-size: 10px; font-weight: 600; padding: 2px 10px; border-radius: 20px; }
+        .library-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 8px 0; border-bottom: 1px solid #f1f5f9;
+            cursor: pointer; transition: 0.2s;
+        }
+        .library-item:last-child { border-bottom: none; }
+        .library-item:hover { background: #f8fafc; margin: 0 -6px; padding: 8px 6px; border-radius: 8px; }
+        .library-item .icon { font-size: 20px; }
+        .library-item .info h4 { font-size: 13px; font-weight: 500; }
+        .library-item .info p { font-size: 11px; color: #64748b; }
+        .library-item .action { margin-left: auto; font-size: 11px; font-weight: 500; color: #2563eb; cursor: pointer; }
+
+        /* ============================================================ */
+        /* ===== СООБЩЕСТВА ===== */
+        /* ============================================================ */
+        .communities-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px; margin-top: 6px;
+        }
+        .community-card {
+            background: #f8fafc; border: 1px solid #e2e8f0;
+            border-radius: 14px; padding: 14px; text-align: center;
+            transition: 0.3s; cursor: pointer;
+        }
+        .community-card:hover { border-color: #2563eb; transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.06); }
+        .community-card .emoji { font-size: 28px; display: block; margin-bottom: 2px; }
+        .community-card h4 { font-size: 13px; font-weight: 600; }
+        .community-card .desc { font-size: 11px; color: #64748b; margin: 2px 0; }
+        .community-card .members { font-size: 10px; color: #94a3b8; }
+        .community-card .btn-join {
+            margin-top: 6px; background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #fff; border: none; padding: 3px 14px;
+            border-radius: 20px; font-size: 11px; cursor: pointer; transition: 0.2s;
+        }
+        .community-card .btn-join:hover { opacity: 0.9; }
+        .community-card .btn-join.joined { background: #94a3b8; cursor: default; }
+
+        .members-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px; margin-top: 10px;
+        }
+        .member-card {
+            background: #ffffff; border: 1px solid #e2e8f0;
+            border-radius: 14px; padding: 14px 16px;
+            display: flex; align-items: center; gap: 12px;
+            transition: 0.2s; cursor: pointer;
+        }
+        .member-card:hover { border-color: #2563eb; transform: translateY(-2px); }
+        .member-card .avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: #2563eb20; color: #2563eb;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 16px; flex-shrink: 0;
+        }
+        .member-card .info h4 { font-size: 13px; font-weight: 500; }
+        .member-card .info p { font-size: 11px; color: #64748b; }
+        .member-card .info .role-tag {
+            font-size: 9px; font-weight: 600; padding: 1px 8px;
+            border-radius: 12px; background: #2563eb15; color: #2563eb;
+            display: inline-block; margin-top: 2px;
+        }
+
+        .tabs {
+            display: flex; gap: 4px; margin-bottom: 14px;
+            border-bottom: 1px solid #e2e8f0; padding-bottom: 2px;
+        }
+        .tabs .tab {
+            padding: 6px 16px; border-radius: 20px 20px 0 0;
+            font-size: 13px; font-weight: 500; cursor: pointer;
+            transition: 0.2s; color: #64748b;
+        }
+        .tabs .tab:hover { background: #f1f5f9; color: #0f172a; }
+        .tabs .tab.active { background: #2563eb; color: #fff; }
+        .community-tab-content { display: block; }
+
+        /* ============================================================ */
+        /* ===== ГРАНТЫ ===== */
+        /* ============================================================ */
+        .grants-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;
+        }
+        .grant-card {
+            background: #ffffff; border-radius: 16px; padding: 18px 20px;
+            border: 1px solid #e2e8f0; transition: 0.2s; cursor: pointer;
+        }
+        .grant-card:hover { border-color: #2563eb; transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+        .grant-card .icon { font-size: 32px; display: block; margin-bottom: 4px; }
+        .grant-card h3 { font-size: 15px; font-weight: 600; }
+        .grant-card .org { font-size: 12px; color: #64748b; margin: 2px 0; }
+        .grant-card .amount { font-size: 18px; font-weight: 700; color: #2563eb; margin: 6px 0 4px; }
+        .grant-card .deadline { font-size: 12px; color: #dc2626; font-weight: 500; }
+        .grant-card .status {
+            display: inline-block; font-size: 10px; font-weight: 600;
+            padding: 2px 12px; border-radius: 20px; margin-top: 6px;
+        }
+        .status-open { background: #2563eb20; color: #2563eb; }
+        .status-closed { background: #e2e8f0; color: #64748b; }
+        .status-urgent { background: #fef3c7; color: #92400e; }
+
+        /* ============================================================ */
+        /* ===== СТИПЕНДИИ ===== */
+        /* ============================================================ */
+        .scholarship-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;
+        }
+        .scholarship-card {
+            background: #ffffff; border-radius: 16px; padding: 18px 20px;
+            border: 1px solid #e2e8f0; transition: 0.2s; cursor: pointer;
+        }
+        .scholarship-card:hover { border-color: #2563eb; transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+        .scholarship-card .icon { font-size: 32px; display: block; margin-bottom: 4px; }
+        .scholarship-card h3 { font-size: 15px; font-weight: 600; }
+        .scholarship-card .org { font-size: 12px; color: #64748b; margin: 2px 0; }
+        .scholarship-card .amount { font-size: 18px; font-weight: 700; color: #2563eb; margin: 6px 0 4px; }
+        .scholarship-card .deadline { font-size: 12px; color: #dc2626; font-weight: 500; }
+        .scholarship-card .status {
+            display: inline-block; font-size: 10px; font-weight: 600;
+            padding: 2px 12px; border-radius: 20px; margin-top: 6px;
+        }
+
+        /* ============================================================ */
+        /* ===== BI БЛОКИ ===== */
+        /* ============================================================ */
+        .bi-header {
+            display: flex; justify-content: space-between;
+            align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;
+        }
+        .bi-filters {
+            background: #ffffff; border-radius: 16px; padding: 16px 20px;
+            border: 1px solid #e2e8f0; margin-bottom: 16px;
+            display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+        }
+        .bi-filters .filter-group { display: flex; align-items: center; gap: 6px; }
+        .bi-filters label { font-size: 12px; color: #64748b; font-weight: 500; }
+        .bi-filters select, .bi-filters input {
+            padding: 7px 12px; border: 1px solid #cbd5e1;
+            border-radius: 20px; font-size: 12px; background: #f8fafc;
+            cursor: pointer; transition: 0.2s;
+        }
+        .bi-filters select:focus, .bi-filters input:focus {
+            border-color: #2563eb; outline: none;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+        .bi-filters .filter-btn {
+            background: linear-gradient(135deg, #2563eb, #3b82f6); color: #fff;
+            border: none; padding: 7px 20px; border-radius: 20px;
+            font-weight: 600; font-size: 12px; cursor: pointer; transition: 0.2s;
+        }
+        .bi-filters .filter-btn:hover { opacity: 0.9; }
+        .bi-filters .filter-btn.secondary { background: #e2e8f0; color: #475569; }
+        .bi-filters .filter-btn.secondary:hover { background: #cbd5e1; }
+
+        .bi-grid {
+            display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 14px; margin-bottom: 20px;
+        }
+        @media (max-width: 768px) { .bi-grid { grid-template-columns: 1fr 1fr; } }
+        .bi-card {
+            background: #ffffff; border-radius: 16px; padding: 16px 18px;
+            border: 1px solid #e2e8f0; text-align: center;
+        }
+        .bi-card .num { font-size: 32px; font-weight: 700; color: #2563eb; }
+        .bi-card .label { font-size: 12px; color: #64748b; margin-top: 2px; }
+        .bi-card .change { font-size: 11px; font-weight: 500; margin-top: 4px; }
+        .bi-card .change.up { color: #2563eb; }
+        .bi-card .change.down { color: #dc2626; }
+
+        .bi-charts { display: grid; grid-template-columns: 2fr 1fr; gap: 18px; margin-bottom: 18px; }
+        @media (max-width: 768px) { .bi-charts { grid-template-columns: 1fr; } }
+        .bi-chart {
+            background: #ffffff; border-radius: 16px; padding: 18px 20px;
+            border: 1px solid #e2e8f0;
+        }
+        .bi-chart h3 { font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #0f172a; }
+        .bi-chart .bar-container { display: flex; flex-direction: column; gap: 8px; }
+        .bi-chart .bar-row { display: flex; align-items: center; gap: 10px; }
+        .bi-chart .bar-row .label { font-size: 12px; min-width: 100px; color: #64748b; }
+        .bi-chart .bar-row .bar-track {
+            flex: 1; height: 20px; background: #f1f5f9;
+            border-radius: 10px; overflow: hidden;
+        }
+        .bi-chart .bar-row .bar-track .bar-fill {
+            height: 100%; border-radius: 10px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+            transition: width 0.6s ease;
+        }
+        .bi-chart .bar-row .value { font-size: 12px; font-weight: 600; min-width: 40px; text-align: right; }
+
+        .bi-table {
+            background: #ffffff; border-radius: 16px; padding: 18px 20px;
+            border: 1px solid #e2e8f0; overflow-x: auto;
+        }
+        .bi-table h3 { font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #0f172a; }
+        .bi-table table {
+            width: 100%; border-collapse: collapse; font-size: 12px; min-width: 600px;
+        }
+        .bi-table th {
+            text-align: left; padding: 8px 10px; background: #f1f5f9;
+            font-weight: 600; border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap; color: #0f172a;
+        }
+        .bi-table td { padding: 8px 10px; border-bottom: 1px solid #f1f5f9; }
+        .bi-table tr:hover td { background: #f8fafc; }
+        .bi-table .highlight-cell { color: #2563eb; font-weight: 600; }
+        .bi-table .total-row { font-weight: 600; background: #eff6ff; }
+        .bi-table .total-row td { border-top: 2px solid #2563eb; }
+
+        .bi-kpi-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 14px; margin-bottom: 16px;
+        }
+        @media (max-width: 768px) { .bi-kpi-grid { grid-template-columns: 1fr 1fr; } }
+        .bi-kpi-card {
+            background: #ffffff; border-radius: 16px; padding: 16px 18px;
+            border: 1px solid #e2e8f0; transition: 0.2s;
+            position: relative; overflow: hidden;
+        }
+        .bi-kpi-card:hover { border-color: #2563eb; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,99,235,0.08); }
+        .bi-kpi-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0;
+            height: 3px; background: linear-gradient(90deg, #2563eb, #3b82f6);
+        }
+        .bi-kpi-card .icon-big {
+            position: absolute; top: 12px; right: 14px;
+            font-size: 32px; opacity: 0.15;
+        }
+        .bi-kpi-card .num {
+            font-size: 32px; font-weight: 700; color: #2563eb; line-height: 1;
+        }
+        .bi-kpi-card .num .unit { font-size: 14px; font-weight: 500; color: #64748b; }
+        .bi-kpi-card .label { font-size: 12px; color: #64748b; margin-top: 6px; line-height: 1.4; }
+        .bi-kpi-card .change {
+            font-size: 11px; font-weight: 600; margin-top: 6px;
+            display: flex; align-items: center; gap: 4px;
+        }
+        .bi-kpi-card .change.up { color: #10b981; }
+        .bi-kpi-card .change.down { color: #ef4444; }
+        .bi-kpi-card .change.neutral { color: #64748b; }
+
+        .bi-section-grid {
+            display: grid; grid-template-columns: 2fr 1fr;
+            gap: 16px; margin-bottom: 16px;
+        }
+        @media (max-width: 900px) { .bi-section-grid { grid-template-columns: 1fr; } }
+
+        .bi-block {
+            background: #ffffff; border-radius: 16px; padding: 18px 20px;
+            border: 1px solid #e2e8f0;
+        }
+        .bi-block h3 {
+            font-size: 14px; font-weight: 600; margin-bottom: 12px;
+            color: #0f172a; display: flex; justify-content: space-between; align-items: center;
+        }
+        .bi-block h3 .link { font-size: 11px; font-weight: 500; color: #2563eb; cursor: pointer; }
+
+        .kpi-section-row {
+            display: flex; align-items: center; gap: 10px;
+            padding: 8px 0; border-bottom: 1px solid #f1f5f9;
+        }
+        .kpi-section-row:last-child { border-bottom: none; }
+        .kpi-section-row .sec-icon {
+            width: 32px; height: 32px; border-radius: 8px;
+            background: #eff6ff; color: #2563eb;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; flex-shrink: 0;
+        }
+        .kpi-section-row .sec-info { flex: 1; min-width: 0; }
+        .kpi-section-row .sec-info .sec-title {
+            font-size: 13px; font-weight: 500;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .kpi-section-row .sec-info .sec-bar-track {
+            height: 8px; background: #f1f5f9; border-radius: 10px;
+            overflow: hidden; margin-top: 4px;
+        }
+        .kpi-section-row .sec-info .sec-bar-track .sec-bar-fill {
+            height: 100%; border-radius: 10px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+            transition: width 0.8s ease;
+        }
+        .kpi-section-row .sec-value { font-size: 13px; font-weight: 700; color: #2563eb; min-width: 60px; text-align: right; }
+        .kpi-section-row .sec-max { font-size: 11px; color: #94a3b8; min-width: 40px; text-align: right; }
+
+        .bi-line-chart {
+            position: relative; height: 200px; margin: 10px 0;
+            padding: 10px 0 30px 30px;
+            border-left: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;
+        }
+        .bi-line-chart .grid-line {
+            position: absolute; left: 30px; right: 0;
+            height: 1px; background: #f1f5f9;
+        }
+        .bi-line-chart .chart-bar {
+            position: absolute; bottom: 30px; width: 32px;
+            background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+            border-radius: 6px 6px 0 0; transition: 0.3s;
+            cursor: pointer; display: flex; align-items: flex-start;
+            justify-content: center; color: #fff;
+            font-size: 10px; font-weight: 600; padding-top: 2px;
+        }
+        .bi-line-chart .chart-bar:hover { opacity: 0.85; transform: scaleY(1.03); }
+        .bi-line-chart .chart-month-label {
+            position: absolute; bottom: 6px; font-size: 10px;
+            color: #64748b; text-align: center; width: 32px;
+        }
+        .bi-line-chart .y-axis-label {
+            position: absolute; left: 0; font-size: 10px;
+            color: #94a3b8; width: 25px; text-align: right;
+        }
+
+        .bi-top-list { display: flex; flex-direction: column; gap: 6px; }
+        .bi-top-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 8px 10px; background: #f8fafc;
+            border-radius: 10px; transition: 0.2s; cursor: pointer;
+        }
+        .bi-top-item:hover { background: #eff6ff; }
+        .bi-top-item .rank {
+            font-size: 13px; font-weight: 700; color: #94a3b8;
+            min-width: 22px; text-align: center;
+        }
+        .bi-top-item .rank.gold { color: #f59e0b; }
+        .bi-top-item .rank.silver { color: #94a3b8; }
+        .bi-top-item .rank.bronze { color: #d97706; }
+        .bi-top-item .avatar-sm {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: #2563eb20; color: #2563eb;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 11px; flex-shrink: 0;
+        }
+        .bi-top-item .info { flex: 1; min-width: 0; }
+        .bi-top-item .info h5 {
+            font-size: 12px; font-weight: 500;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .bi-top-item .info p { font-size: 10px; color: #94a3b8; }
+        .bi-top-item .score { font-size: 14px; font-weight: 700; color: #2563eb; }
+
+        .bi-table-wrap {
+            background: #ffffff; border-radius: 16px; padding: 18px 20px;
+            border: 1px solid #e2e8f0; overflow-x: auto; margin-bottom: 16px;
+        }
+        .bi-table-wrap h3 {
+            font-size: 14px; font-weight: 600; margin-bottom: 12px;
+            color: #0f172a; display: flex; justify-content: space-between;
+            align-items: center; flex-wrap: wrap; gap: 8px;
+        }
+        .bi-table-wrap h3 .legend {
+            display: flex; gap: 12px; font-size: 11px; font-weight: 400;
+        }
+        .bi-table-wrap h3 .legend span {
+            display: flex; align-items: center; gap: 4px; color: #64748b;
+        }
+        .bi-table-wrap h3 .legend .dot { width: 8px; height: 8px; border-radius: 50%; }
+        .bi-table-kpi {
+            width: 100%; border-collapse: collapse; font-size: 12px;
+            min-width: 1000px;
+        }
+        .bi-table-kpi th {
+            text-align: left; padding: 10px 8px; background: #f1f5f9;
+            font-weight: 600; color: #0f172a;
+            border-bottom: 2px solid #e2e8f0; white-space: nowrap;
+            font-size: 11px; position: sticky; top: 0;
+        }
+        .bi-table-kpi td { padding: 8px; border-bottom: 1px solid #f1f5f9; font-size: 12px; }
+        .bi-table-kpi tr:hover td { background: #f8fafc; }
+        .bi-table-kpi .name-cell { font-weight: 500; color: #0f172a; }
+        .bi-table-kpi .total-cell { font-weight: 700; color: #2563eb; background: #eff6ff; }
+        .bi-table-kpi .score-cell { font-weight: 600; }
+        .bi-table-kpi .score-cell.high { color: #10b981; }
+        .bi-table-kpi .score-cell.medium { color: #f59e0b; }
+        .bi-table-kpi .score-cell.low { color: #ef4444; }
+        .bi-table-kpi .total-row { font-weight: 700; background: #eff6ff; }
+        .bi-table-kpi .total-row td { border-top: 2px solid #2563eb; color: #1e3a5f; }
+
+        .progress-mini {
+            display: inline-block; width: 60px; height: 6px;
+            background: #f1f5f9; border-radius: 10px;
+            overflow: hidden; vertical-align: middle; margin-left: 6px;
+        }
+        .progress-mini .fill {
+            height: 100%; border-radius: 10px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+        }
+
+        /* ===== ОБЩИЕ ===== */
+        .tag-sm { background: #e2e8f0; padding: 2px 10px; border-radius: 20px; font-size: 10px; display: inline-block; }
+        .tag-sm.green { background: #2563eb20; color: #2563eb; }
+        .page-subtitle { color: #64748b; font-size: 12px; margin-bottom: 10px; }
+        .mt-12 { margin-top: 12px; }
+        .mb-12 { margin-bottom: 12px; }
+        .flex { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+        .text-center { text-align: center; }
+
+        /* ===== ИИ-ВИДЖЕТ ===== */
+        .ai-widget {
+            position: fixed; bottom: 30px; right: 30px; width: 380px;
+            max-height: 520px; background: #ffffff; border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            border: 1px solid #e2e8f0; display: none;
+            flex-direction: column; overflow: hidden; z-index: 999;
+        }
+        .ai-widget.open { display: flex; animation: fadeIn 0.25s ease; }
+        .ai-header {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #fff; padding: 12px 16px; font-weight: 600;
+            display: flex; justify-content: space-between;
+            align-items: center; font-size: 13px; flex-shrink: 0;
+        }
+        .ai-header .status {
+            font-size: 10px; font-weight: 400; opacity: 0.85;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .ai-header .status .dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: #93c5fd; display: inline-block; animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .ai-header .close { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; opacity: 0.8; }
+        .ai-body { padding: 14px; overflow-y: auto; flex: 1; max-height: 360px; }
+        .ai-quick { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+        .ai-quick button {
+            background: #f1f5f9; border: 1px solid #e2e8f0;
+            border-radius: 20px; padding: 4px 12px;
+            font-size: 11px; cursor: pointer; transition: 0.25s; font-weight: 500;
+        }
+        .ai-quick button:hover { background: #2563eb; color: #fff; border-color: #2563eb; }
+        .ai-answer {
+            background: #f1f5f9; padding: 12px 14px; border-radius: 12px;
+            font-size: 12px; margin-top: 5px; line-height: 1.5;
+            white-space: pre-wrap; min-height: 40px; border-left: 4px solid #2563eb;
+        }
+        .ai-suggestions { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+        .ai-suggestions .suggestion {
+            background: #e2e8f0; padding: 3px 10px; border-radius: 16px;
+            font-size: 10px; color: #475569; cursor: pointer; transition: 0.2s;
+        }
+        .ai-suggestions .suggestion:hover { background: #2563eb; color: #fff; }
+        .ai-input-row {
+            display: flex; gap: 6px; margin-top: 8px; padding-top: 8px;
+            border-top: 1px solid #e2e8f0; flex-shrink: 0;
+        }
+        .ai-input-row input {
+            flex: 1; padding: 6px 12px; border: 1px solid #cbd5e1;
+            border-radius: 30px; font-size: 12px;
+        }
+        .ai-input-row input:focus { border-color: #2563eb; outline: none; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+        .ai-input-row button {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #fff; border: none; padding: 6px 16px;
+            border-radius: 30px; cursor: pointer; font-size: 12px; font-weight: 500;
+        }
+        .ai-toggle {
+            position: fixed; bottom: 30px; right: 30px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #fff; border: none; border-radius: 50%;
+            width: 50px; height: 50px; font-size: 24px; cursor: pointer;
+            box-shadow: 0 8px 28px rgba(37,99,235,0.4); z-index: 998; transition: 0.3s;
+        }
+        .ai-toggle:hover { transform: scale(1.08); }
+        .ai-toggle .badge {
+            position: absolute; top: -4px; right: -4px;
+            background: #ef4444; color: #fff; font-size: 9px;
+            font-weight: 700; width: 18px; height: 18px;
+            border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; border: 2px solid #fff;
+        }
+
+        /* ===== МОДАЛЬНЫЕ ===== */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
+            z-index: 1000; justify-content: center; align-items: center;
+        }
+        .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+        .modal {
+            background: #fff; border-radius: 18px; padding: 22px 26px;
+            max-width: 420px; width: 90%;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.2); text-align: center;
+        }
+        .modal .modal-icon { font-size: 36px; margin-bottom: 4px; }
+        .modal h3 { font-size: 16px; margin-bottom: 4px; color: #0f172a; }
+        .modal p { color: #64748b; font-size: 12px; margin-bottom: 10px; white-space: pre-wrap; }
+        .modal .modal-btn {
+            background: linear-gradient(135deg, #2563eb, #3b82f6); color: #fff;
+            border: none; padding: 5px 24px; border-radius: 30px;
+            font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 12px;
+        }
+        .modal .modal-btn:hover { opacity: 0.9; }
+        .modal .modal-btn.secondary { background: #e2e8f0; color: #475569; margin-left: 6px; }
+        .modal .modal-btn.secondary:hover { background: #cbd5e1; }
+
+        .toast {
+            position: fixed; bottom: 100px; right: 30px;
+            background: #0f172a; color: #fff; padding: 8px 18px;
+            border-radius: 14px; font-size: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            z-index: 999; display: none; animation: fadeIn 0.3s ease;
+        }
+        .toast.show { display: block; }
+
+        .footer {
+            text-align: center; padding: 12px 28px;
+            border-top: 1px solid #e2e8f0; font-size: 11px; color: #64748b;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app" id="app">
+
+    <!-- ===== ШАПКА ===== -->
+    <header class="header">
+        <div class="logo-area">
+            <div class="logo-icon">С</div>
+            <div class="logo-text">Портал <span>СМУС</span></div>
+        </div>
+        <nav class="nav" id="mainNav">
+            <a href="#" class="active" data-page="home">🏠 Главная</a>
+            <a href="#" data-page="dashboard">🚀 Действуй</a>
+            <a href="#" data-page="calendar">📅 Календарь</a>
+            <a href="#" data-page="member-profile" class="hidden-nav">👤 Профиль члена СМУС</a>
+            <a href="#" data-page="communities">🌐 Сообщества</a>
+            <a href="#" data-page="library">📚 Библиотека</a>
+            <a href="#" data-page="analytics">📊 BI</a>
+            <a href="#" data-page="ideas" class="hidden-nav">💡 Идеи</a>
+            <a href="#" data-page="chat" class="hidden-nav">💬 Чат</a>
+            <a href="#" data-page="grants" class="hidden-nav">🏆 Гранты</a>
+            <a href="#" data-page="scholarships" class="hidden-nav">🎓 Стипендии</a>
+        </nav>
+        <div class="header-right">
+            <span class="search-icon" onclick="showToast('🔍 Поиск: введите запрос')">🔍</span>
+            <span class="notif-icon" onclick="showToast('🔔 У вас 3 новых уведомления')">🔔<span class="notif-dot"></span></span>
+            <div class="header-badge"><span class="coin">⭐</span> <span id="userScore">248</span></div>
+            <div class="user-badge" onclick="navigateTo('dashboard')">
+                <div class="user-avatar">АП</div>
+                <span>Анастасия</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== КОНТЕНТ ===== -->
+    <div class="content">
+
+        <!-- ========================================================== -->
+        <!-- ===== ГЛАВНАЯ ===== -->
+        <!-- ========================================================== -->
+        <div class="page active" id="page-home">
+            <div class="main-hero">
+                <div class="hero-content">
+                    <div class="hero-badge-top">🏛️ Добро пожаловать в СМУС</div>
+                    <h1>Совет молодых учёных и специалистов <span>ДАСУ</span></h1>
+                    <p class="hero-desc"><strong>СМУС</strong> — сообщество молодых инженеров и учёных <strong>5 предприятий</strong> дивизиона АСУ.</p>
+                    <div class="badge-row">
+                        <span class="badge">🏛️ Создан в 2025 году</span>
+                        <span class="badge">🏢 Дивизион АСУ</span>
+                        <span class="badge highlight">👥 350+ участников</span>
+                        <span class="badge">🚀 5 предприятий</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="smus-opk-banner" onclick="showToast('🔗 Переход на портал СМУС ХК (ИС) АО «ОПК»...')">
+                <div class="left">
+                    <div class="icon-box">🏛️</div>
+                    <div>
+                        <h3>СМУС ХК (ИС) АО «ОПК»</h3>
+                        <p>Единый портал Совета молодых учёных и специалистов холдинга</p>
+                    </div>
+                </div>
+                <div class="right">
+                    <button class="btn-opk" onclick="event.stopPropagation(); showToast('🔗 Переход на СМУС ХК (ИС) АО «ОПК»...');">Перейти на портал →</button>
+                </div>
+            </div>
+
+            <div class="accent-start">
+                <div class="left">
+                    <h2>🌟 Начните свой путь в СМУС прямо сейчас</h2>
+                    <p>Выберите, с чего хотите начать — мы поможем на каждом шагу</p>
+                </div>
+                <div class="right">
+                    <button class="btn-start primary" onclick="navigateTo('ideas')">💡 Подать идею</button>
+                    <button class="btn-start" onclick="navigateTo('calendar')">📅 Узнать о мероприятиях</button>
+                    <button class="btn-start" onclick="navigateTo('communities')">🌐 Найти сообщество</button>
+                </div>
+            </div>
+
+            <div class="onboarding-path" id="onboardingPath">
+                <div class="path-header">
+                    <h2>🚀 Путь новичка — твои первые шаги</h2>
+                    <span class="path-badge" id="pathBadge">0 из 5 шагов</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar"><div class="fill" id="pathProgress" style="width: 0%;"></div></div>
+                    <span class="progress-text" id="pathProgressText">0%</span>
+                </div>
+                <div class="path-steps" id="pathSteps">
+                    <div class="path-step" data-step="1"><div class="step-check">1</div><div class="step-info"><h4>Заполни профиль и интересы</h4><p>Расскажи о себе и выбери темы</p></div><span class="step-reward">+10 баллов</span><span class="step-action" onclick="navigateTo('dashboard')">перейти →</span></div>
+                    <div class="path-step" data-step="2"><div class="step-check">2</div><div class="step-info"><h4>Вступи в одно сообщество</h4><p>Найди единомышленников</p></div><span class="step-reward">+2 балла</span><span class="step-action" onclick="navigateTo('communities')">перейти →</span></div>
+                    <div class="path-step" data-step="3"><div class="step-check">3</div><div class="step-info"><h4>Запишись на ближайшее мероприятие</h4><p>Выбери событие в календаре</p></div><span class="step-reward">+5 баллов</span><span class="step-action" onclick="navigateTo('calendar')">перейти →</span></div>
+                    <div class="path-step" data-step="4"><div class="step-check">4</div><div class="step-info"><h4>Задай вопрос ИИ-ассистенту</h4><p>Познакомься с помощником</p></div><span class="step-reward">+1 балл</span><span class="step-action" onclick="openAI()">перейти →</span></div>
+                    <div class="path-step" data-step="5"><div class="step-check">5</div><div class="step-info"><h4>Подай первую идею</h4><p>Начни с малого — твоя идея важна</p></div><span class="step-reward">+10 баллов</span><span class="step-action" onclick="navigateTo('ideas')">перейти →</span></div>
+                </div>
+            </div>
+
+            <div class="news-highlight">
+                <div class="news-block">
+                    <div class="label">📰 Последние новости</div>
+                    <h2>Новости СМУС <span class="link" onclick="showToast('📰 Все новости загружаются...')">Все →</span></h2>
+                    <div class="highlight-item" onclick="showModal('🏆 Хакатон «Цифровой прорыв» завершён', '28 августа 2026 года прошёл хакатон.')"><span class="icon">🏆</span><div class="content"><h4>Хакатон «Цифровой прорыв» завершён</h4><p>12 команд, победитель — «КиберНова»</p><span class="tag tag-hot">🔥 Горячее</span></div></div>
+                    <div class="highlight-item" onclick="showModal('🎓 Объявлены стипендиаты Президента РФ', '10 молодых учёных дивизиона АСУ стали стипендиатами Президента РФ.')"><span class="icon">🎓</span><div class="content"><h4>Объявлены стипендиаты Президента РФ</h4><p>10 учёных получили стипендии</p><span class="tag tag-new">✨ Новое</span></div></div>
+                    <div class="highlight-item" onclick="showModal('🤖 Запущен ИИ-ассистент на портале', 'На портале СМУС появился ИИ-ассистент.')"><span class="icon">🤖</span><div class="content"><h4>Запущен ИИ-ассистент</h4><p>Помогает находить информацию</p><span class="tag tag-new">✨ Новое</span></div></div>
+                </div>
+                <div class="news-block">
+                    <div class="label">📅 Ближайшие анонсы</div>
+                    <h2>Анонсы <span class="link" onclick="navigateTo('calendar')">Все →</span></h2>
+                    <div class="announce-grid">
+                        <div class="announce-item" onclick="showModal('Хакатон «Цифровой прорыв»', '28 августа 2026, 10:00')"><div class="date">28 <span class="month">авг</span></div><div class="info"><h4>Хакатон</h4><p>Цифровой прорыв</p></div><button class="btn-sm" onclick="event.stopPropagation(); registerEvent()">Запись</button></div>
+                        <div class="announce-item" onclick="showModal('Семинар по ИИ', '2 сентября 2026, 15:00')"><div class="date">2 <span class="month">сен</span></div><div class="info"><h4>Семинар ИИ</h4><p>В НИОКР</p></div><button class="btn-sm" onclick="event.stopPropagation(); registerEvent()">Запись</button></div>
+                        <div class="announce-item" onclick="showModal('Заседание СМУС', '10 сентября 2026, 11:00')"><div class="date">10 <span class="month">сен</span></div><div class="info"><h4>Заседание</h4><p>Итоги полугодия</p></div><button class="btn-sm" style="background:#2563eb;" onclick="event.stopPropagation(); showToast('🔗 Ссылка отправлена');">Подключиться</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accent-why">
+                <div class="item" onclick="showModal('🚀 Карьерный рост', 'Участвуйте в реальных проектах.')"><span class="icon">🚀</span><h3>Карьерный рост</h3><p>Реальные проекты, конкурсы</p><span class="highlight-num">🔥 24 мероприятия</span></div>
+                <div class="item" onclick="showModal('💡 Реализация идей', 'Ваши идеи не останутся незамеченными.')"><span class="icon">💡</span><h3>Реализация идей</h3><p>От подачи до внедрения</p><span class="highlight-num">⭐ 47 идей в работе</span></div>
+                <div class="item" onclick="showModal('🏆 Признание', 'Ваши достижения поощряются.')"><span class="icon">🏆</span><h3>Признание</h3><p>Баллы, стипендии, льготы</p><span class="highlight-num">⭐ 248+ баллов у лидеров</span></div>
+            </div>
+
+            <div class="main-grid">
+                <div>
+                    <div class="card">
+                        <h2>💡 Возможности СМУС</h2>
+                        <div class="info-item" onclick="showModal('🧪 Научно-техническое', 'Исследования, конкурсы, гранты.')"><span class="icon">🧪</span><div class="text"><h4>Научно-техническое развитие</h4><p>Исследования, конкурсы, гранты</p></div></div>
+                        <div class="info-item" onclick="showModal('⚙️ Технологическое', 'Улучшения, эффективность.')"><span class="icon">⚙️</span><div class="text"><h4>Технологическое развитие</h4><p>Улучшения, эффективность</p></div></div>
+                        <div class="info-item" onclick="showModal('🤝 Работа с персоналом', 'Адаптация, наставничество.')"><span class="icon">🤝</span><div class="text"><h4>Работа с персоналом</h4><p>Адаптация, наставничество</p></div></div>
+                        <div class="info-item" onclick="showModal('📋 Рабочие группы', 'Проектные команды.')"><span class="icon">📋</span><div class="text"><h4>Рабочие группы</h4><p>Проектные команды по направлениям</p></div></div>
+                        <div class="info-item" onclick="showModal('👨‍🔬 Преемники ГК', 'Подготовка кадрового резерва.')"><span class="icon">👨‍🔬</span><div class="text"><h4>Преемники главных конструкторов</h4><p>Подготовка кадрового резерва</p></div></div>
+                        <div class="info-item" onclick="navigateTo('dashboard')" style="border-bottom: none; background:#eff6ff; border-radius:8px; margin-top:4px; padding:10px 12px;"><span class="icon">👤</span><div class="text"><h4>Мой цифровой профиль</h4><p>Карьерный трек, бейджи, портфолио</p></div><span style="margin-left:auto; font-size:11px; color:#2563eb;">Перейти →</span></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="card">
+                        <h2>🛠️ Инструменты для развития</h2>
+                        <div class="resource-grid">
+                            <div class="resource-item" onclick="navigateTo('grants')"><span class="icon">🏆</span><h4>Гранты и конкурсы</h4><p>Поддержка инициатив</p></div>
+                            <div class="resource-item" onclick="showModal('💰 Фонд инноваций ОПК', 'Финансовая поддержка.')"><span class="icon">💰</span><h4>Фонд инноваций ОПК</h4><p>Финансовая поддержка</p></div>
+                        </div>
+                    </div>
+                    <div class="card mt-12">
+                        <h2>🎓 Поддержка молодых учёных</h2>
+                        <div class="resource-grid">
+                            <div class="resource-item" onclick="navigateTo('scholarships')"><span class="icon">🎓</span><h4>Стипендии</h4><p>Президента, Правительства</p></div>
+                            <div class="resource-item" onclick="showModal('🏠 Льготы и соцподдержка', 'Жильё, проезд, здоровье.')"><span class="icon">🏠</span><h4>Льготы и соцподдержка</h4><p>Жильё, проезд, здоровье</p></div>
+                        </div>
+                    </div>
+                    <div class="card mt-12">
+                        <h2>💡 Инициативы</h2>
+                        <div class="initiative-grid">
+                            <div class="initiative-btn" onclick="navigateTo('ideas')"><span class="icon">💡</span>Подать идею</div>
+                            <div class="initiative-btn" onclick="showToast('📋 Создание задачи (в разработке)')"><span class="icon">📋</span>Создать задачу</div>
+                        </div>
+                    </div>
+                    <div class="card mt-12">
+                        <h2>📊 Аналитика <span class="link" onclick="navigateTo('analytics')">→</span></h2>
+                        <div class="info-item" onclick="navigateTo('analytics')"><span class="icon">📊</span><div class="text"><h4>BI Аналитика СМУС</h4><p>Верхнеуровневый дашборд и КПЭ</p></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="poll-widget">
+                <div class="poll-header"><h2>📊 Опрос</h2><span>Какое направление для хакатона вам интересно?</span></div>
+                <div class="poll-options">
+                    <div class="option" onclick="votePoll(this, 1)"><span>🤖 ИИ</span><div class="bar"><div class="fill" style="width:45%;"></div></div><span class="perc">45%</span></div>
+                    <div class="option" onclick="votePoll(this, 2)"><span>🔧 Цифровые двойники</span><div class="bar"><div class="fill" style="width:30%;"></div></div><span class="perc">30%</span></div>
+                    <div class="option" onclick="votePoll(this, 3)"><span>📊 Аналитика данных</span><div class="bar"><div class="fill" style="width:25%;"></div></div><span class="perc">25%</span></div>
+                </div>
+            </div>
+
+            <div class="faq-section">
+                <div class="faq-block">
+                    <h3>❓ Вопросы новичков</h3>
+                    <div class="faq-item"><div class="question" onclick="toggleFaq(this)"><span>Кто может быть в СМУС?</span><span class="arrow">▾</span></div><div class="answer">Молодые учёные и специалисты 20–35 лет со стажем от 6 месяцев.</div></div>
+                    <div class="faq-item"><div class="question" onclick="toggleFaq(this)"><span>Это обязательно? Это нагрузка?</span><span class="arrow">▾</span></div><div class="answer">Нет, участие добровольное.</div></div>
+                    <div class="faq-item"><div class="question" onclick="toggleFaq(this)"><span>Что такое баллы?</span><span class="arrow">▾</span></div><div class="answer">Баллы — признание активности.</div></div>
+                    <div class="faq-item"><div class="question" onclick="toggleFaq(this)"><span>Как подать идею?</span><span class="arrow">▾</span></div><div class="answer">В разделе «Идеи».</div></div>
+                    <div class="faq-item"><div class="question" onclick="toggleFaq(this)"><span>С кем посоветоваться?</span><span class="arrow">▾</span></div><div class="answer">С наставником или ИИ-ассистентом.</div></div>
+                </div>
+                <div class="mentor-block">
+                    <div class="avatar">ЕК</div>
+                    <h4>🤝 Твой наставник — Елена К.</h4>
+                    <p>Ответит на вопросы и подскажет, куда сходить в первый месяц.</p>
+                    <button class="btn-mentor" onclick="navigateTo('dashboard')">Перейти в Действуй</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- ===== ДЕЙСТВУЙ ===== -->
+        <!-- ========================================================== -->
+        <div class="page" id="page-dashboard">
+            <div class="greeting">
+                <div><h1>🚀 Действуй, Анастасия! <small>Заместитель председателя СМУС ДАСУ</small></h1></div>
+                <div class="greeting-role">🏅 Заместитель председателя</div>
+            </div>
+            <div style="margin-bottom:16px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+                <div class="role-badge"><span class="dot"></span><span>Текущая роль: <strong>Заместитель председателя по НТР</strong></span><span class="change" onclick="showModal('🔄 Смена роли', 'Доступные роли.')">Сменить</span></div>
+                <span style="font-size:11px; color:#64748b;">👤 Права: управление мероприятиями, экспертиза идей, аналитика</span>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="num" id="statIdeas">8</div><div class="label">💡 Идей</div><div class="sub">3 в работе</div></div>
+                <div class="stat-card"><div class="num">24</div><div class="label">📅 Мероприятий</div><div class="sub">5 ближайших</div></div>
+                <div class="stat-card"><div class="num" id="statScore">248</div><div class="label">⭐ Баллов</div><div class="sub">+12 на неделе</div></div>
+                <div class="stat-card"><div class="num" id="statCommunities">6</div><div class="label">🌐 Сообществ</div><div class="sub">2 активных</div></div>
+            </div>
+            <div class="dashboard-grid">
+                <div>
+                    <div class="card"><h2>🚀 Быстрые действия</h2>
+                        <div class="quick-actions">
+                            <div class="quick-btn" onclick="navigateTo('ideas')"><span class="icon">💡</span>Подать идею</div>
+                            <div class="quick-btn" onclick="navigateTo('calendar')"><span class="icon">📅</span>Календарь</div>
+                            <div class="quick-btn" onclick="navigateTo('chat')"><span class="icon">💬</span>Чат</div>
+                            <div class="quick-btn" onclick="navigateTo('member-profile')"><span class="icon">👤</span>Профиль члена</div>
+                            <div class="quick-btn" onclick="navigateTo('communities')"><span class="icon">🌐</span>Сообщества</div>
+                            <div class="quick-btn" onclick="showToast('📋 Совместная работа')"><span class="icon">🤝</span>Совместная работа</div>
+                        </div>
+                    </div>
+                    <div class="my-day mt-12">
+                        <div class="header"><h2>📅 Мой день</h2><span class="date" id="todayDate"></span></div>
+                        <div class="timeline">
+                            <div class="item" onclick="showModal('📋 Хакатон «Цифровой прорыв»', 'Сегодня в 10:00')"><span class="time">10:00</span><div class="info"><h4>Хакатон «Цифровой прорыв»</h4><p>Участие в мероприятии</p></div><span class="badge badge-event">Мероприятие</span></div>
+                            <div class="item" onclick="showModal('📝 Сдать отчёт по проекту', 'Дедлайн: сегодня, 18:00')"><span class="time">18:00</span><div class="info"><h4>Сдать отчёт по проекту</h4><p>Дедлайн сегодня</p></div><span class="badge badge-deadline">Дедлайн</span></div>
+                            <div class="item" onclick="showModal('💻 Вебинар по ИИ', 'Завтра в 15:00')"><span class="time">Завтра 15:00</span><div class="info"><h4>Вебинар по ИИ</h4><p>Онлайн-трансляция</p></div><span class="badge badge-webinar">Вебинар</span></div>
+                            <div class="item" onclick="showModal('📋 Подать заявку на стипендию', 'Дедлайн: 20 сентября 2026')"><span class="time">До 20 сен</span><div class="info"><h4>Подать заявку на стипендию</h4><p>Президента РФ</p></div><span class="badge badge-task">Задача</span></div>
+                        </div>
+                    </div>
+                    <div class="card mt-12">
+                        <h2>📚 База знаний и обучение <span class="link" onclick="navigateTo('library')">Перейти →</span></h2>
+                        <div class="info-item" onclick="navigateTo('library')"><span class="icon">📚</span><div class="text"><h4>База знаний СМУС</h4><p>Положения, регламенты, лучшие практики</p></div></div>
+                        <div class="info-item" onclick="showModal('🎓 Обучение и ДПО', 'Доступны курсы.')"><span class="icon">🎓</span><div class="text"><h4>Обучение и ДПО</h4><p>Курсы, вебинары, сертификация</p></div></div>
+                    </div>
+                    <div class="card mt-12">
+                        <h2>👤 Мой цифровой профиль</h2>
+                        <div class="profile-full" style="grid-template-columns: 200px 1fr; gap:16px;">
+                            <div class="profile-sidebar" style="padding:14px;">
+                                <div class="avatar-big" style="width:60px; height:60px; font-size:24px; margin-bottom:6px;">АП</div>
+                                <h3 style="font-size:15px;">Анастасия Полторако</h3>
+                                <div class="position" style="font-size:12px;">Заместитель председателя СМУС ДАСУ</div>
+                                <div class="division" style="font-size:12px;">🏢 Дивизион АСУ</div>
+                                <div class="stats-mini" style="margin:8px 0;">
+                                    <div class="stat" style="padding:6px;"><div class="num" style="font-size:16px;">8</div><div class="lbl" style="font-size:9px;">Идеи</div></div>
+                                    <div class="stat" style="padding:6px;"><div class="num" style="font-size:16px; color:#f59e0b;">248</div><div class="lbl" style="font-size:9px;">⭐ Баллов</div></div>
+                                    <div class="stat" style="padding:6px;"><div class="num" style="font-size:16px;">24</div><div class="lbl" style="font-size:9px;">Мероприятий</div></div>
+                                </div>
+                                <div class="level-badge" style="padding:8px; margin:8px 0;"><div class="title" style="font-size:12px;">🏅 Уровень: Активист</div><div class="sub" style="font-size:10px;">До следующего: 150 баллов</div></div>
+                            </div>
+                            <div class="profile-content" style="padding:14px;">
+                                <div class="profile-tabs" style="margin-bottom:10px;">
+                                    <span class="tab active" onclick="switchProfileTab('dash-overview', this)" style="font-size:12px; padding:4px 12px;">📋 Обзор</span>
+                                    <span class="tab" onclick="switchProfileTab('dash-career', this)" style="font-size:12px; padding:4px 12px;">🚀 Карьера</span>
+                                    <span class="tab" onclick="switchProfileTab('dash-badges', this)" style="font-size:12px; padding:4px 12px;">🏅 Бейджи</span>
+                                    <span class="tab" onclick="switchProfileTab('dash-portfolio', this)" style="font-size:12px; padding:4px 12px;">📁 Портфолио</span>
+                                </div>
+                                <div class="profile-tab-content active" id="tab-dash-overview">
+                                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+                                        <div style="background:#f8fafc; padding:10px; border-radius:10px; text-align:center;"><div style="font-size:18px; font-weight:700; color:#2563eb;">8</div><div style="font-size:10px; color:#64748b;">💡 Идей</div></div>
+                                        <div style="background:#f8fafc; padding:10px; border-radius:10px; text-align:center;"><div style="font-size:18px; font-weight:700; color:#2563eb;">24</div><div style="font-size:10px; color:#64748b;">📅 Мероприятий</div></div>
+                                        <div style="background:#f8fafc; padding:10px; border-radius:10px; text-align:center;"><div style="font-size:18px; font-weight:700; color:#f59e0b;">150</div><div style="font-size:10px; color:#64748b;">⭐ До уровня</div></div>
+                                    </div>
+                                </div>
+                                <div class="profile-tab-content" id="tab-dash-career">
+                                    <div class="career-track" style="padding-left:24px;">
+                                        <div class="career-step completed" style="padding:8px 12px; margin-bottom:4px;"><div class="circle" style="left:-20px; top:10px;"></div><div class="step-header"><h4 style="font-size:12px;">🌱 Новичок</h4><span class="status status-done" style="font-size:9px; padding:1px 8px;">✅ Пройдено</span></div></div>
+                                        <div class="career-step active" style="padding:8px 12px; margin-bottom:4px;"><div class="circle" style="left:-20px; top:10px;"></div><div class="step-header"><h4 style="font-size:12px;">🚀 Активист</h4><span class="status status-current" style="font-size:9px; padding:1px 8px;">📍 Текущий</span></div></div>
+                                        <div class="career-step" style="padding:8px 12px; margin-bottom:4px;"><div class="circle" style="left:-20px; top:10px;"></div><div class="step-header"><h4 style="font-size:12px;">💡 Эксперт</h4><span class="status status-locked" style="font-size:9px; padding:1px 8px;">🔒</span></div></div>
+                                        <div class="career-step" style="padding:8px 12px; margin-bottom:4px;"><div class="circle" style="left:-20px; top:10px;"></div><div class="step-header"><h4 style="font-size:12px;">🤝 Наставник</h4><span class="status status-locked" style="font-size:9px; padding:1px 8px;">🔒</span></div></div>
+                                        <div class="career-step" style="padding:8px 12px; margin-bottom:4px;"><div class="circle" style="left:-20px; top:10px;"></div><div class="step-header"><h4 style="font-size:12px;">🏛️ Лидер</h4><span class="status status-locked" style="font-size:9px; padding:1px 8px;">🔒</span></div></div>
+                                    </div>
+                                </div>
+                                <div class="profile-tab-content" id="tab-dash-badges">
+                                    <div class="badges-grid" style="grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap:8px;">
+                                        <div class="badge-item" style="padding:8px;"><span class="icon" style="font-size:24px;">🏅</span><h4 style="font-size:10px;">Первый шаг</h4></div>
+                                        <div class="badge-item" style="padding:8px;"><span class="icon" style="font-size:24px;">🎯</span><h4 style="font-size:10px;">Идейный</h4></div>
+                                        <div class="badge-item" style="padding:8px;"><span class="icon" style="font-size:24px;">📅</span><h4 style="font-size:10px;">Активный</h4></div>
+                                        <div class="badge-item locked" style="padding:8px;"><span class="icon" style="font-size:24px;">🎤</span><h4 style="font-size:10px;">Спикер</h4></div>
+                                        <div class="badge-item locked" style="padding:8px;"><span class="icon" style="font-size:24px;">🤝</span><h4 style="font-size:10px;">Наставник</h4></div>
+                                        <div class="badge-item locked" style="padding:8px;"><span class="icon" style="font-size:24px;">👑</span><h4 style="font-size:10px;">Лидер</h4></div>
+                                        <div class="badge-item" style="padding:8px;"><span class="icon" style="font-size:24px;">🔥</span><h4 style="font-size:10px;">Вовлечённый</h4></div>
+                                    </div>
+                                </div>
+                                <div class="profile-tab-content" id="tab-dash-portfolio">
+                                    <div class="portfolio-grid" style="grid-template-columns:1fr; gap:6px;">
+                                        <div class="portfolio-item" style="padding:8px 12px;"><span class="icon" style="font-size:16px;">📄</span><h4 style="font-size:12px;">Цифровой двойник</h4><div class="date" style="font-size:10px;">Август 2026</div></div>
+                                        <div class="portfolio-item" style="padding:8px 12px;"><span class="icon" style="font-size:16px;">🎓</span><h4 style="font-size:12px;">Сертификат по ИИ</h4><div class="date" style="font-size:10px;">Июль 2026</div></div>
+                                        <div class="portfolio-item" style="padding:8px 12px;"><span class="icon" style="font-size:16px;">🏆</span><h4 style="font-size:12px;">Хакатон</h4><div class="date" style="font-size:10px;">Август 2026</div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mt-12"><h2>📅 Ближайшие мероприятия <span class="link" onclick="navigateTo('calendar')">Все →</span></h2>
+                        <div class="event-item"><div><span class="event-title">Хакатон «Цифровой прорыв»</span><span class="event-meta"> · 28 авг</span></div><span class="event-badge" onclick="event.stopPropagation(); registerEvent()">Записаться</span></div>
+                        <div class="event-item"><div><span class="event-title">Семинар по ИИ</span><span class="event-meta"> · 2 сен</span></div><span class="event-badge" onclick="event.stopPropagation(); registerEvent()">Записаться</span></div>
+                        <div class="event-item"><div><span class="event-title">Заседание СМУС</span><span class="event-meta"> · 10 сен</span></div><span class="event-badge" style="background:#fef3c7; color:#92400e;">Онлайн</span></div>
+                    </div>
+                    <div class="recommendations mt-12">
+                        <h2>🎯 Рекомендации для вас</h2>
+                        <div class="rec-grid">
+                            <div class="rec-item" onclick="navigateTo('calendar')"><span class="icon">📅</span><h4>Конференция по ИИ</h4><p>15 октября 2026</p><span class="tag-rec">На основе интересов</span></div>
+                            <div class="rec-item" onclick="navigateTo('communities')"><span class="icon">🤖</span><h4>ИИ в НИОКР</h4><p>Сообщество · 8 участников</p><span class="tag-rec">Рекомендуем</span></div>
+                            <div class="rec-item" onclick="navigateTo('ideas')"><span class="icon">💡</span><h4>Подать идею по ИИ</h4><p>Вдохновение из интересов</p><span class="tag-rec">+10 баллов</span></div>
+                            <div class="rec-item" onclick="showToast('📚 Открыть библиотеку')"><span class="icon">📚</span><h4>Курс по ИИ</h4><p>Для инженеров · 150 баллов</p><span class="tag-rec">Популярно</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="card"><h2>🏆 Моя активность</h2>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                            <div style="background:#eff6ff; border-radius:12px; padding:14px 16px; text-align:center; border:1px solid #2563eb30; cursor:pointer;" onclick="navigateTo('ideas')"><div style="font-size:28px; font-weight:700; color:#2563eb;">8</div><div style="font-size:12px; color:#64748b;">💡 Идей подано</div></div>
+                            <div style="background:#fef3c7; border-radius:12px; padding:14px 16px; text-align:center; border:1px solid #f59e0b30; cursor:pointer;" onclick="navigateTo('member-profile')"><div style="font-size:28px; font-weight:700; color:#f59e0b;">248</div><div style="font-size:12px; color:#64748b;">⭐ Баллов</div></div>
+                            <div style="background:#dbeafe; border-radius:12px; padding:14px 16px; text-align:center; border:1px solid #2563eb30; cursor:pointer;" onclick="navigateTo('calendar')"><div style="font-size:28px; font-weight:700; color:#2563eb;">24</div><div style="font-size:12px; color:#64748b;">📅 Мероприятий</div></div>
+                            <div style="background:#fce4ec; border-radius:12px; padding:14px 16px; text-align:center; border:1px solid #ec407a30; cursor:pointer;" onclick="navigateTo('communities')"><div style="font-size:28px; font-weight:700; color:#ec407a;">6</div><div style="font-size:12px; color:#64748b;">🌐 Сообществ</div></div>
+                        </div>
+                    </div>
+                    <div class="card mt-12"><h2>⭐ Обмен баллов</h2>
+                        <div class="exchange-grid">
+                            <div class="exchange-item"><span class="icon">🎓</span><div class="name">Курс</div><div class="price">150</div><button class="btn-ex" onclick="exchangePoints(150, 'курс')">Обменять</button></div>
+                            <div class="exchange-item"><span class="icon">🎫</span><div class="name">Конференция</div><div class="price">300</div><button class="btn-ex" onclick="exchangePoints(300, 'конференцию')">Обменять</button></div>
+                            <div class="exchange-item"><span class="icon">🎁</span><div class="name">Мерч</div><div class="price">100</div><button class="btn-ex" onclick="exchangePoints(100, 'мерч')">Обменять</button></div>
+                            <div class="exchange-item"><span class="icon">📚</span><div class="name">Библиотека</div><div class="price">200</div><button class="btn-ex" onclick="exchangePoints(200, 'библиотеку')">Обменять</button></div>
+                        </div>
+                    </div>
+                    <div class="mentor-block mt-12">
+                        <div class="avatar">ЕК</div>
+                        <h4>🤝 Твой наставник — Елена К.</h4>
+                        <p>Ответит на вопросы и подскажет, куда сходить в первый месяц.</p>
+                        <button class="btn-mentor" onclick="showToast('💬 Написать наставнику Елене К.')">Написать наставнику</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- ===== BI АНАЛИТИКА ===== -->
+        <!-- ========================================================== -->
+        <div class="page" id="page-analytics">
+
+            <div class="bi-switcher">
+                <button class="active" onclick="switchBISubpage('overview', this)" id="biBtnOverview">📊 Верхнеуровневый BI</button>
+                <button onclick="switchBISubpage('kpi', this)" id="biBtnKpi">🎯 BI Аналитика КПЭ СМУС</button>
+            </div>
+
+            <!-- ПОДСТРАНИЦА 1: Верхнеуровневый BI -->
+            <div class="bi-subpage active" id="bi-subpage-overview">
+                <div class="bi-header">
+                    <div>
+                        <h2 style="font-size:18px; margin-bottom:2px;">📊 Верхнеуровневый BI</h2>
+                        <p class="page-subtitle">Сводная аналитика активности СМУС, идей и финансирования</p>
+                    </div>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <button class="bi-filters filter-btn secondary" onclick="showToast('📥 Экспорт отчёта в Excel...')">📥 Экспорт</button>
+                        <button class="bi-filters filter-btn" onclick="showToast('📊 Отчёт сформирован')">📊 Сформировать отчёт</button>
+                    </div>
+                </div>
+
+                <div class="bi-grid">
+                    <div class="bi-card"><div class="num">350</div><div class="label">👥 Всего участников</div><div class="change up">↑ +12% за месяц</div></div>
+                    <div class="bi-card"><div class="num">47</div><div class="label">💡 Всего идей</div><div class="change up">↑ +8 за месяц</div></div>
+                    <div class="bi-card"><div class="num">18</div><div class="label">✅ Идей в работе</div><div class="change up">↑ +5 за месяц</div></div>
+                    <div class="bi-card"><div class="num">12</div><div class="label">💰 Внедрено в финансирование</div><div class="change up">↑ +3 за месяц</div></div>
+                </div>
+
+                <div class="bi-charts">
+                    <div class="bi-chart">
+                        <h3>📈 Активность по предприятиям</h3>
+                        <div class="bar-container">
+                            <div class="bar-row"><span class="label">АО «НИИАА»</span><div class="bar-track"><div class="bar-fill" style="width:95%;"></div></div><span class="value">95%</span></div>
+                            <div class="bar-row"><span class="label">АО «Системы управления»</span><div class="bar-track"><div class="bar-fill" style="width:88%;"></div></div><span class="value">88%</span></div>
+                            <div class="bar-row"><span class="label">АО «НИИМЭ»</span><div class="bar-track"><div class="bar-fill" style="width:72%;"></div></div><span class="value">72%</span></div>
+                            <div class="bar-row"><span class="label">АО «ОКБ МЭЛ»</span><div class="bar-track"><div class="bar-fill" style="width:65%;"></div></div><span class="value">65%</span></div>
+                            <div class="bar-row"><span class="label">АО «НИИИС»</span><div class="bar-track"><div class="bar-fill" style="width:58%;"></div></div><span class="value">58%</span></div>
+                        </div>
+                    </div>
+                    <div class="bi-chart">
+                        <h3>📊 Статус идей</h3>
+                        <div class="bar-container">
+                            <div class="bar-row"><span class="label">🟢 Внедрено</span><div class="bar-track"><div class="bar-fill" style="width:25%; background:linear-gradient(90deg,#2563eb,#3b82f6);"></div></div><span class="value">12</span></div>
+                            <div class="bar-row"><span class="label">🟡 Одобрено</span><div class="bar-track"><div class="bar-fill" style="width:21%; background:linear-gradient(90deg,#f59e0b,#d97706);"></div></div><span class="value">10</span></div>
+                            <div class="bar-row"><span class="label">🔵 Экспертиза</span><div class="bar-track"><div class="bar-fill" style="width:17%; background:linear-gradient(90deg,#3b82f6,#2563eb);"></div></div><span class="value">8</span></div>
+                            <div class="bar-row"><span class="label">⚪ Новая</span><div class="bar-track"><div class="bar-fill" style="width:23%; background:linear-gradient(90deg,#64748b,#475569);"></div></div><span class="value">11</span></div>
+                            <div class="bar-row"><span class="label">🔴 Отклонено</span><div class="bar-track"><div class="bar-fill" style="width:13%; background:linear-gradient(90deg,#dc2626,#b91c1c);"></div></div><span class="value">6</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bi-table">
+                    <h3>📋 Детальная статистика</h3>
+                    <table>
+                        <thead><tr><th>Предприятие</th><th>Участников</th><th>Идей</th><th>Экспертиза</th><th>Внедрено</th><th>В финансировании</th><th>Активность</th></tr></thead>
+                        <tbody>
+                            <tr><td>АО «НИИАА»</td><td>124</td><td>18</td><td>4</td><td>5</td><td class="highlight-cell">6</td><td>95%</td></tr>
+                            <tr><td>АО «Системы управления»</td><td>86</td><td>12</td><td>2</td><td>4</td><td class="highlight-cell">3</td><td>88%</td></tr>
+                            <tr><td>АО «НИИМЭ»</td><td>52</td><td>7</td><td>1</td><td>2</td><td class="highlight-cell">2</td><td>72%</td></tr>
+                            <tr><td>АО «ОКБ МЭЛ»</td><td>45</td><td>5</td><td>1</td><td>1</td><td class="highlight-cell">1</td><td>65%</td></tr>
+                            <tr><td>АО «НИИИС»</td><td>43</td><td>5</td><td>0</td><td>0</td><td class="highlight-cell">0</td><td>58%</td></tr>
+                            <tr class="total-row"><td>📊 ИТОГО</td><td>350</td><td>47</td><td>8</td><td>12</td><td style="color:#2563eb;">12</td><td>—</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="margin-top:14px; padding:12px 16px; background:#eff6ff; border-radius:12px; border:1px solid #2563eb30; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+                    <span style="font-size:13px; color:#1e3a5f;">📊 Общая активность: <strong>82%</strong></span>
+                    <span style="font-size:13px; color:#1e3a5f;">💡 Конверсия: <strong>25.5%</strong></span>
+                    <span style="font-size:13px; color:#1e3a5f;">📈 Рост: <strong>+18%</strong></span>
+                </div>
+            </div>
+
+            <!-- ПОДСТРАНИЦА 2: BI Аналитика КПЭ СМУС -->
+            <div class="bi-subpage" id="bi-subpage-kpi">
+                <div class="bi-header">
+                    <div>
+                        <h2 style="font-size:18px; margin-bottom:2px;">🎯 BI Аналитика КПЭ СМУС</h2>
+                        <p class="page-subtitle">Дашборд утверждённых показателей эффективности (Приложение к КПЭ СМУС АО «ОПК», 2026)</p>
+                    </div>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <button class="bi-filters filter-btn secondary" onclick="showToast('📥 Экспорт отчёта в Excel...')">📥 Экспорт</button>
+                        <button class="bi-filters filter-btn" onclick="showToast('📊 Отчёт сформирован')">📊 Сформировать отчёт</button>
+                    </div>
+                </div>
+
+                <div class="bi-filters">
+                    <div class="filter-group"><label>Период:</label>
+                        <select id="filterPeriod" onchange="applyFilters()">
+                            <option value="h1-2026">I полугодие 2026</option>
+                            <option value="q1-2026">I квартал 2026</option>
+                            <option value="q2-2026">II квартал 2026</option>
+                            <option value="year-2025">2025 год</option>
+                        </select>
+                    </div>
+                    <div class="filter-group"><label>Дивизион:</label>
+                        <select id="filterDivision" onchange="applyFilters()">
+                            <option value="all">Все дивизионы</option>
+                            <option value="asu" selected>АСУ</option>
+                            <option value="svyaz">Связь</option>
+                            <option value="opk">ОПК</option>
+                        </select>
+                    </div>
+                    <div class="filter-group"><label>Предприятие:</label>
+                        <select id="filterCompany" onchange="applyFilters()">
+                            <option value="all">Все предприятия</option>
+                            <option value="niiaa">АО «НИИАА»</option>
+                            <option value="su" selected>АО «Системы управления»</option>
+                            <option value="niime">АО «НИИМЭ»</option>
+                            <option value="okb">АО «ОКБ МЭЛ»</option>
+                            <option value="niis">АО «НИИИС»</option>
+                        </select>
+                    </div>
+                    <div class="filter-group"><label>Статус:</label>
+                        <select id="filterStatus" onchange="applyFilters()">
+                            <option value="all">Все статусы</option>
+                            <option value="member">Члены СМУС</option>
+                            <option value="board" selected>Правление СМУС</option>
+                            <option value="responsible">Ответственные за Советы</option>
+                            <option value="successors">Преемники ГК</option>
+                        </select>
+                    </div>
+                    <div class="filter-group"><label>Поиск:</label>
+                        <input type="text" placeholder="Имя участника..." id="filterSearch" onkeypress="if(event.key==='Enter') applyFilters()" />
+                    </div>
+                    <button class="filter-btn secondary" onclick="resetFilters()">Сбросить</button>
+                </div>
+
+                <div class="bi-kpi-grid">
+                    <div class="bi-kpi-card"><div class="icon-big">🏆</div><div class="num">2 847<span class="unit"> баллов</span></div><div class="label">Общая сумма баллов</div><div class="change up">↑ +18% к прошлому периоду</div></div>
+                    <div class="bi-kpi-card"><div class="icon-big">👥</div><div class="num">52<span class="unit"> чел.</span></div><div class="label">Активных участников</div><div class="change up">↑ +8 человек</div></div>
+                    <div class="bi-kpi-card"><div class="icon-big">📊</div><div class="num">54.7<span class="unit"> ср. балл</span></div><div class="label">Средний балл на участника</div><div class="change up">↑ +6.2 к прошлому периоду</div></div>
+                    <div class="bi-kpi-card"><div class="icon-big">🎯</div><div class="num">34<span class="unit"> %</span></div><div class="label">Выполнение годового плана</div><div class="change up">↑ на 34% от плана года</div></div>
+                </div>
+
+                <div class="bi-section-grid">
+                    <div class="bi-block">
+                        <h3>📈 Баллы по разделам КПЭ <span class="link" onclick="showToast('Подробнее по разделам...')">Подробнее →</span></h3>
+                        <div class="kpi-section-row"><div class="sec-icon">1️⃣</div><div class="sec-info"><div class="sec-title">Раздел 1. Общая организация работы</div><div class="sec-bar-track"><div class="sec-bar-fill" style="width:78%;"></div></div></div><div class="sec-value">628</div><div class="sec-max">/ 800</div></div>
+                        <div class="kpi-section-row"><div class="sec-icon">2️⃣</div><div class="sec-info"><div class="sec-title">Раздел 2. Научная активность</div><div class="sec-bar-track"><div class="sec-bar-fill" style="width:65%;"></div></div></div><div class="sec-value">412</div><div class="sec-max">/ 630</div></div>
+                        <div class="kpi-section-row"><div class="sec-icon">3️⃣</div><div class="sec-info"><div class="sec-title">Раздел 3. Научно-техническое развитие</div><div class="sec-bar-track"><div class="sec-bar-fill" style="width:82%;"></div></div></div><div class="sec-value">576</div><div class="sec-max">/ 700</div></div>
+                        <div class="kpi-section-row"><div class="sec-icon">4️⃣</div><div class="sec-info"><div class="sec-title">Раздел 4. Конвейер предложений</div><div class="sec-bar-track"><div class="sec-bar-fill" style="width:48%;"></div></div></div><div class="sec-value">289</div><div class="sec-max">/ 600</div></div>
+                        <div class="kpi-section-row"><div class="sec-icon">5️⃣</div><div class="sec-info"><div class="sec-title">Раздел 5. Правление СМУС</div><div class="sec-bar-track"><div class="sec-bar-fill" style="width:71%;"></div></div></div><div class="sec-value">427</div><div class="sec-max">/ 600</div></div>
+                        <div class="kpi-section-row"><div class="sec-icon">6️⃣</div><div class="sec-info"><div class="sec-title">Раздел 6. Ответственные за Советы</div><div class="sec-bar-track"><div class="sec-bar-fill" style="width:88%;"></div></div></div><div class="sec-value">212</div><div class="sec-max">/ 240</div></div>
+                        <div class="kpi-section-row"><div class="sec-icon">7️⃣</div><div class="sec-info"><div class="sec-title">Раздел 7. Преемники ГК</div><div class="sec-bar-track"><div class="sec-bar-fill" style="width:76%;"></div></div></div><div class="sec-value">303</div><div class="sec-max">/ 400</div></div>
+                    </div>
+
+                    <div class="bi-block">
+                        <h3>🏆 Топ-10 лидеров <span class="link" onclick="showToast('Полный рейтинг...')">Весь рейтинг →</span></h3>
+                        <div class="bi-top-list">
+                            <div class="bi-top-item" onclick="showToast('👤 Иванов Сергей')"><span class="rank gold">1</span><div class="avatar-sm">ИС</div><div class="info"><h5>Иванов Сергей</h5><p>АО «НИИАА» · Правление</p></div><span class="score">512</span></div>
+                            <div class="bi-top-item" onclick="showToast('👤 Петров Алексей')"><span class="rank silver">2</span><div class="avatar-sm">ПА</div><div class="info"><h5>Петров Алексей</h5><p>АО «НИИАА» · Правление</p></div><span class="score">478</span></div>
+                            <div class="bi-top-item" onclick="showToast('👤 Смирнова Елена')"><span class="rank bronze">3</span><div class="avatar-sm">СЕ</div><div class="info"><h5>Смирнова Елена</h5><p>АО «ОПК» · Ответственная</p></div><span class="score">445</span></div>
+                            <div class="bi-top-item" onclick="showToast('👤 Полторако Анастасия')"><span class="rank">4</span><div class="avatar-sm">АП</div><div class="info"><h5>Полторако Анастасия</h5><p>АО «Системы управления» · Правление</p></div><span class="score">398</span></div>
+                            <div class="bi-top-item" onclick="showToast('👤 Анна М.')"><span class="rank">5</span><div class="avatar-sm">АМ</div><div class="info"><h5>Анна М.</h5><p>АО «НИИМЭ» · Член СМУС</p></div><span class="score">356</span></div>
+                            <div class="bi-top-item" onclick="showToast('👤 Дмитрий С.')"><span class="rank">6</span><div class="avatar-sm">ДС</div><div class="info"><h5>Дмитрий С.</h5><p>АО «ОКБ МЭЛ» · Член СМУС</p></div><span class="score">312</span></div>
+                            <div class="bi-top-item" onclick="showToast('👤 Козлов Игорь')"><span class="rank">7</span><div class="avatar-sm">КИ</div><div class="info"><h5>Козлов Игорь</h5><p>АО «Системы управления» · Секретарь</p></div><span class="score">287</span></div>
+                            <div class="bi-top-item" onclick="showToast('👤 Елена К.')"><span class="rank">8</span><div class="avatar-sm">ЕК</div><div class="info"><h5>Елена К.</h5><p>АО «НИИИС» · Член СМУС</p></div><span class="score">264</span></div>
+                            <div class="bi-top-item" onclick="showToast('👤 Сергей В.')"><span class="rank">9</span><div class="avatar-sm">СВ</div><div class="info"><h5>Сергей В.</h5><p>АО «НИИАА» · Преемник ГК</p></div><span class="score">231</span></div>
+                            <div class="bi-top-item" onclick="showToast('👤 Ольга Т.')"><span class="rank">10</span><div class="avatar-sm">ОТ</div><div class="info"><h5>Ольга Т.</h5><p>АО «ОПК» · Ответственная</p></div><span class="score">218</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bi-section-grid">
+                    <div class="bi-block">
+                        <h3>📈 Динамика баллов по месяцам (2026)</h3>
+                        <div class="bi-line-chart">
+                            <div class="grid-line" style="bottom: 80%;"></div>
+                            <div class="grid-line" style="bottom: 60%;"></div>
+                            <div class="grid-line" style="bottom: 40%;"></div>
+                            <div class="grid-line" style="bottom: 20%;"></div>
+                            <div class="y-axis-label" style="bottom: 78%;">800</div>
+                            <div class="y-axis-label" style="bottom: 58%;">600</div>
+                            <div class="y-axis-label" style="bottom: 38%;">400</div>
+                            <div class="y-axis-label" style="bottom: 18%;">200</div>
+                            <div class="chart-bar" style="left: 60px; height: 35%;" title="Январь: 280">280</div>
+                            <div class="chart-month-label" style="left: 60px;">Янв</div>
+                            <div class="chart-bar" style="left: 110px; height: 42%;" title="Февраль: 336">336</div>
+                            <div class="chart-month-label" style="left: 110px;">Фев</div>
+                            <div class="chart-bar" style="left: 160px; height: 48%;" title="Март: 384">384</div>
+                            <div class="chart-month-label" style="left: 160px;">Мар</div>
+                            <div class="chart-bar" style="left: 210px; height: 55%;" title="Апрель: 440">440</div>
+                            <div class="chart-month-label" style="left: 210px;">Апр</div>
+                            <div class="chart-bar" style="left: 260px; height: 61%;" title="Май: 488">488</div>
+                            <div class="chart-month-label" style="left: 260px;">Май</div>
+                            <div class="chart-bar" style="left: 310px; height: 68%;" title="Июнь: 544">544</div>
+                            <div class="chart-month-label" style="left: 310px;">Июн</div>
+                        </div>
+                        <p style="font-size:11px; color:#94a3b8; text-align:center; margin-top:6px;">Общая динамика баллов членов СМУС за I полугодие 2026</p>
+                    </div>
+
+                    <div class="bi-block">
+                        <h3>📊 Распределение участников</h3>
+                        <div style="display:flex; flex-direction:column; gap:10px; margin-top:6px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; background:#f8fafc; border-radius:10px;"><span style="font-size:12px; color:#64748b;">👑 Правление СМУС</span><span style="font-size:16px; font-weight:700; color:#2563eb;">8 чел.</span></div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; background:#f8fafc; border-radius:10px;"><span style="font-size:12px; color:#64748b;">👥 Члены СМУС</span><span style="font-size:16px; font-weight:700; color:#2563eb;">28 чел.</span></div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; background:#f8fafc; border-radius:10px;"><span style="font-size:12px; color:#64748b;">🎯 Ответственные за Советы</span><span style="font-size:16px; font-weight:700; color:#2563eb;">6 чел.</span></div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; background:#f8fafc; border-radius:10px;"><span style="font-size:12px; color:#64748b;">🔬 Преемники ГК</span><span style="font-size:16px; font-weight:700; color:#2563eb;">10 чел.</span></div>
+                        </div>
+                        <div style="margin-top:12px; padding:10px 12px; background:#eff6ff; border-radius:10px; border:1px solid #2563eb30;">
+                            <p style="font-size:11px; color:#1e3a5f; line-height:1.5;">💡 <strong>Инсайт:</strong> самая высокая вовлечённость — в разделе 3 «Научно-техническое развитие» (82%). Рекомендуется усилить работу по разделу 4 «Конвейер предложений» (48%).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bi-table-wrap">
+                    <h3>📋 Детальная таблица КПЭ участников
+                        <div class="legend">
+                            <span><span class="dot" style="background:#10b981;"></span>Высокий (80%+)</span>
+                            <span><span class="dot" style="background:#f59e0b;"></span>Средний (50-79%)</span>
+                            <span><span class="dot" style="background:#ef4444;"></span>Низкий (&lt;50%)</span>
+                        </div>
+                    </h3>
+                    <table class="bi-table-kpi">
+                        <thead>
+                            <tr><th>Участник</th><th>Организация</th><th>Статус</th><th>Р1</th><th>Р2</th><th>Р3</th><th>Р4</th><th>Р5</th><th>Р6</th><th>Р7</th><th>ОБЩЕЕ</th><th>Прогресс</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="name-cell">Иванов Сергей</td><td>АО «НИИАА»</td><td>Правление</td><td class="score-cell high">128</td><td class="score-cell high">86</td><td class="score-cell high">142</td><td class="score-cell medium">62</td><td class="score-cell high">94</td><td>—</td><td>—</td><td class="total-cell">512</td><td><div class="progress-mini"><div class="fill" style="width:85%;"></div></div></td></tr>
+                            <tr><td class="name-cell">Петров Алексей</td><td>АО «НИИАА»</td><td>Правление</td><td class="score-cell high">112</td><td class="score-cell high">78</td><td class="score-cell high">134</td><td class="score-cell medium">58</td><td class="score-cell high">96</td><td>—</td><td>—</td><td class="total-cell">478</td><td><div class="progress-mini"><div class="fill" style="width:80%;"></div></div></td></tr>
+                            <tr><td class="name-cell">Смирнова Елена</td><td>АО «ОПК»</td><td>Ответственная</td><td class="score-cell high">104</td><td class="score-cell medium">68</td><td class="score-cell high">98</td><td class="score-cell medium">48</td><td>—</td><td class="score-cell high">127</td><td>—</td><td class="total-cell">445</td><td><div class="progress-mini"><div class="fill" style="width:74%;"></div></div></td></tr>
+                            <tr><td class="name-cell">Полторако Анастасия</td><td>АО «Системы управления»</td><td>Правление</td><td class="score-cell high">92</td><td class="score-cell medium">64</td><td class="score-cell high">108</td><td class="score-cell medium">52</td><td class="score-cell medium">82</td><td>—</td><td>—</td><td class="total-cell">398</td><td><div class="progress-mini"><div class="fill" style="width:66%;"></div></div></td></tr>
+                            <tr><td class="name-cell">Анна М.</td><td>АО «НИИМЭ»</td><td>Член СМУС</td><td class="score-cell medium">78</td><td class="score-cell high">82</td><td class="score-cell medium">72</td><td class="score-cell medium">46</td><td>—</td><td>—</td><td>—</td><td class="total-cell">356</td><td><div class="progress-mini"><div class="fill" style="width:59%;"></div></div></td></tr>
+                            <tr><td class="name-cell">Дмитрий С.</td><td>АО «ОКБ МЭЛ»</td><td>Член СМУС</td><td class="score-cell medium">68</td><td class="score-cell high">76</td><td class="score-cell medium">68</td><td class="score-cell medium">42</td><td>—</td><td>—</td><td class="score-cell medium">58</td><td class="total-cell">312</td><td><div class="progress-mini"><div class="fill" style="width:52%;"></div></div></td></tr>
+                            <tr><td class="name-cell">Козлов Игорь</td><td>АО «Системы управления»</td><td>Секретарь</td><td class="score-cell medium">72</td><td class="score-cell medium">54</td><td class="score-cell medium">68</td><td class="score-cell low">28</td><td class="score-cell medium">65</td><td>—</td><td>—</td><td class="total-cell">287</td><td><div class="progress-mini"><div class="fill" style="width:48%;"></div></div></td></tr>
+                            <tr><td class="name-cell">Елена К.</td><td>АО «НИИИС»</td><td>Член СМУС</td><td class="score-cell medium">62</td><td class="score-cell medium">58</td><td class="score-cell medium">56</td><td class="score-cell low">32</td><td>—</td><td>—</td><td class="score-cell medium">56</td><td class="total-cell">264</td><td><div class="progress-mini"><div class="fill" style="width:44%;"></div></div></td></tr>
+                            <tr><td class="name-cell">Сергей В.</td><td>АО «НИИАА»</td><td>Преемник ГК</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td class="score-cell high">231</td><td class="total-cell">231</td><td><div class="progress-mini"><div class="fill" style="width:38%;"></div></div></td></tr>
+                            <tr><td class="name-cell">Ольга Т.</td><td>АО «ОПК»</td><td>Ответственная</td><td class="score-cell low">42</td><td class="score-cell medium">56</td><td class="score-cell low">38</td><td class="score-cell low">22</td><td>—</td><td class="score-cell medium">60</td><td>—</td><td class="total-cell">218</td><td><div class="progress-mini"><div class="fill" style="width:36%;"></div></div></td></tr>
+                            <tr class="total-row"><td>📊 ИТОГО</td><td>5 предприятий</td><td>52 участника</td><td>628</td><td>412</td><td>576</td><td>289</td><td>427</td><td>212</td><td>303</td><td class="total-cell" style="color:#1e3a5f;">2 847</td><td>—</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="padding:14px 18px; background:#eff6ff; border-radius:12px; border:1px solid #2563eb30; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+                    <span style="font-size:13px; color:#1e3a5f;">📊 Общее выполнение КПЭ: <strong>54.7%</strong></span>
+                    <span style="font-size:13px; color:#1e3a5f;">💡 Конверсия идей: <strong>25.5%</strong></span>
+                    <span style="font-size:13px; color:#1e3a5f;">📈 Рост к прошлому периоду: <strong>+18%</strong></span>
+                    <span style="font-size:13px; color:#1e3a5f;">🎯 Прогноз года: <strong>1 025 баллов</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== ПРОФИЛЬ ЧЛЕНА СМУС ===== -->
+        <div class="page" id="page-member-profile">
+            <h2 style="font-size:18px; margin-bottom:12px;">👤 Профиль члена СМУС</h2>
+            <div class="member-search">
+                <input type="text" placeholder="🔍 Найти участника СМУС..." id="memberSearchInput" onkeypress="if(event.key==='Enter') searchMember()" />
+                <button class="search-btn" onclick="searchMember()">Найти</button>
+            </div>
+            <div class="profile-full">
+                <div class="profile-sidebar">
+                    <div class="avatar-big">ИС</div>
+                    <h3>Иванов Сергей Петрович</h3>
+                    <div class="position">Председатель СМУС ДАСУ</div>
+                    <div class="position">Начальник отдела НИОКР</div>
+                    <div class="division">🏢 Дивизион АСУ · АО «НИИАА»</div>
+                    <div class="stats-mini">
+                        <div class="stat"><div class="num">18</div><div class="lbl">Идеи</div></div>
+                        <div class="stat"><div class="num" style="color:#f59e0b;">512</div><div class="lbl">⭐ Баллов</div></div>
+                        <div class="stat"><div class="num">42</div><div class="lbl">Мероприятий</div></div>
+                    </div>
+                    <div class="level-badge"><div class="title">🏅 Уровень: Эксперт</div><div class="sub">До «Наставника»: 488 баллов</div></div>
+                    <div style="margin-top:10px;">
+                        <h4 style="font-size:13px; margin-bottom:4px;">🎯 Интересы</h4>
+                        <div class="interests-grid">
+                            <span class="interest-tag active">🧠 ИИ</span>
+                            <span class="interest-tag active">🧪 Исследования</span>
+                            <span class="interest-tag active">🎓 Наставничество</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-content">
+                    <div class="profile-tabs">
+                        <span class="tab active" onclick="switchProfileTab('member-overview', this)">📋 Обзор</span>
+                        <span class="tab" onclick="switchProfileTab('member-career', this)">🚀 Карьерный трек</span>
+                        <span class="tab" onclick="switchProfileTab('member-badges', this)">🏅 Бейджи</span>
+                        <span class="tab" onclick="switchProfileTab('member-portfolio', this)">📁 Портфолио</span>
+                    </div>
+                    <div class="profile-tab-content active" id="tab-member-overview">
+                        <p style="color:#64748b; font-size:13px; margin-bottom:12px;">Активность и достижения участника в СМУС</p>
+                        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
+                            <div style="background:#f8fafc; padding:14px; border-radius:12px; text-align:center;"><div style="font-size:24px; font-weight:700; color:#2563eb;">18</div><div style="font-size:12px; color:#64748b;">💡 Идей</div></div>
+                            <div style="background:#f8fafc; padding:14px; border-radius:12px; text-align:center;"><div style="font-size:24px; font-weight:700; color:#2563eb;">42</div><div style="font-size:12px; color:#64748b;">📅 Мероприятий</div></div>
+                            <div style="background:#f8fafc; padding:14px; border-radius:12px; text-align:center;"><div style="font-size:24px; font-weight:700; color:#2563eb;">7</div><div style="font-size:12px; color:#64748b;">🌐 Сообществ</div></div>
+                        </div>
+                    </div>
+                    <div class="profile-tab-content" id="tab-member-career">
+                        <div class="career-track">
+                            <div class="career-step completed"><div class="circle"></div><div class="step-header"><h4>🌱 Новичок</h4><span class="status status-done">✅ Пройдено</span></div></div>
+                            <div class="career-step completed"><div class="circle"></div><div class="step-header"><h4>🚀 Активист</h4><span class="status status-done">✅ Пройдено</span></div></div>
+                            <div class="career-step active"><div class="circle"></div><div class="step-header"><h4>💡 Эксперт</h4><span class="status status-current">📍 Текущий</span></div></div>
+                            <div class="career-step"><div class="circle"></div><div class="step-header"><h4>🤝 Наставник</h4><span class="status status-locked">🔒 Заблокирован</span></div></div>
+                            <div class="career-step"><div class="circle"></div><div class="step-header"><h4>🏛️ Лидер</h4><span class="status status-locked">🔒 Заблокирован</span></div></div>
+                        </div>
+                    </div>
+                    <div class="profile-tab-content" id="tab-member-badges">
+                        <div class="badges-grid">
+                            <div class="badge-item"><span class="icon">🏅</span><h4>Первый шаг</h4></div>
+                            <div class="badge-item"><span class="icon">🎯</span><h4>Идейный</h4></div>
+                            <div class="badge-item"><span class="icon">📅</span><h4>Активный</h4></div>
+                            <div class="badge-item"><span class="icon">🎤</span><h4>Спикер</h4></div>
+                            <div class="badge-item"><span class="icon">🤝</span><h4>Наставник</h4></div>
+                            <div class="badge-item"><span class="icon">🔥</span><h4>Вовлечённый</h4></div>
+                        </div>
+                    </div>
+                    <div class="profile-tab-content" id="tab-member-portfolio">
+                        <div class="portfolio-grid">
+                            <div class="portfolio-item"><span class="icon">📄</span><h4>ИИ-платформа для НИОКР</h4><div class="date">Август 2026</div></div>
+                            <div class="portfolio-item"><span class="icon">🎓</span><h4>Сертификат по ML</h4><div class="date">Июнь 2026</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== СООБЩЕСТВА ===== -->
+        <div class="page" id="page-communities">
+            <h2 style="font-size:18px; margin-bottom:2px;">🌐 Сообщества</h2>
+            <p class="page-subtitle">Кросс-предприятийное взаимодействие</p>
+            <div class="tabs">
+                <span class="tab active" onclick="switchCommunityTab('member-profile', this)">👤 Профиль члена СМУС</span>
+                <span class="tab" onclick="switchCommunityTab('groups', this)">📋 Группы</span>
+                <span class="tab" onclick="switchCommunityTab('members', this)">👥 Участники</span>
+            </div>
+            <div id="communitiesMemberProfile" class="community-tab-content">
+                <p style="color:#64748b; font-size:13px; margin-bottom:12px;">Выберите участника или найдите его через поиск</p>
+                <div class="member-search" style="margin-bottom:14px;">
+                    <input type="text" placeholder="🔍 Найти участника СМУС..." id="commMemberSearch" onkeypress="if(event.key==='Enter') searchMemberFromCommunities()" />
+                    <button class="search-btn" onclick="searchMemberFromCommunities()">Найти</button>
+                </div>
+                <div class="members-grid">
+                    <div class="member-card" onclick="openMemberProfile('Иванов Сергей Петрович', 'Председатель СМУС ДАСУ', 'АО «НИИАА»', 'ИС')"><div class="avatar">ИС</div><div class="info"><h4>Иванов Сергей</h4><p>Председатель СМУС ДАСУ</p><span class="role-tag">АО «НИИАА»</span></div></div>
+                    <div class="member-card" style="border-color:#2563eb; background:#eff6ff;" onclick="openMemberProfile('Полторако Анастасия Валентиновна', 'Заместитель председателя СМУС ДАСУ', 'АО «Системы управления»', 'АП')"><div class="avatar" style="background:linear-gradient(135deg,#2563eb,#3b82f6); color:#fff;">АП</div><div class="info"><h4>Анастасия Полторако</h4><p>Зам. председателя СМУС</p><span class="role-tag">АО «Системы управления»</span></div></div>
+                    <div class="member-card" onclick="openMemberProfile('Петров Алексей Владимирович', 'Заместитель по ТР', 'АО «НИИАА»', 'ПА')"><div class="avatar">ПА</div><div class="info"><h4>Петров Алексей</h4><p>Зам. по ТР</p><span class="role-tag">АО «НИИАА»</span></div></div>
+                    <div class="member-card" onclick="openMemberProfile('Смирнова Елена Дмитриевна', 'Заместитель по РП', 'АО «ОПК»', 'СЕ')"><div class="avatar">СЕ</div><div class="info"><h4>Смирнова Елена</h4><p>Зам. по РП</p><span class="role-tag">АО «ОПК»</span></div></div>
+                    <div class="member-card" onclick="openMemberProfile('Козлов Игорь Михайлович', 'Секретарь СМУС ДАСУ', 'АО «Системы управления»', 'КИ')"><div class="avatar">КИ</div><div class="info"><h4>Козлов Игорь</h4><p>Секретарь СМУС</p><span class="role-tag">АО «Системы управления»</span></div></div>
+                    <div class="member-card" onclick="openMemberProfile('Анна Михайловна', 'Активист', 'АО «НИИМЭ»', 'АМ')"><div class="avatar">АМ</div><div class="info"><h4>Анна М.</h4><p>Активист</p><span class="role-tag">АО «НИИМЭ»</span></div></div>
+                </div>
+            </div>
+            <div id="communitiesGroups" class="community-tab-content" style="display:none;">
+                <div class="communities-grid">
+                    <div class="community-card"><span class="emoji">🤖</span><h4>ИИ и ML</h4><div class="desc">Обсуждение ИИ</div><div class="members">👥 34</div><button class="btn-join" onclick="joinCommunity(this, 2)">Вступить (+2)</button></div>
+                    <div class="community-card"><span class="emoji">🛠️</span><h4>Конструкторы</h4><div class="desc">Проектирование</div><div class="members">👥 28</div><button class="btn-join" onclick="joinCommunity(this, 2)">Вступить (+2)</button></div>
+                    <div class="community-card"><span class="emoji">🎓</span><h4>Наставничество</h4><div class="desc">Поддержка новичков</div><div class="members">👥 19</div><button class="btn-join" onclick="joinCommunity(this, 2)">Вступить (+2)</button></div>
+                    <div class="community-card"><span class="emoji">⚽</span><h4>Спорт</h4><div class="desc">Турниры, забеги</div><div class="members">👥 41</div><button class="btn-join" onclick="joinCommunity(this, 2)">Вступить (+2)</button></div>
+                </div>
+            </div>
+            <div id="communitiesMembers" class="community-tab-content" style="display:none;">
+                <div class="members-grid">
+                    <div class="member-card"><div class="avatar">СИ</div><div class="info"><h4>Иванов Сергей</h4><p>Председатель</p><span class="role-tag">АО «НИИАА»</span></div></div>
+                    <div class="member-card" style="border-color:#2563eb; background:#eff6ff;"><div class="avatar" style="background:linear-gradient(135deg,#2563eb,#3b82f6); color:#fff;">АП</div><div class="info"><h4>Анастасия Полторако</h4><p>Зам. председателя</p><span class="role-tag">АО «Системы управления»</span></div></div>
+                    <div class="member-card"><div class="avatar">ПА</div><div class="info"><h4>Петров Алексей</h4><p>Зам. по ТР</p><span class="role-tag">АО «НИИАА»</span></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== КАЛЕНДАРЬ ===== -->
+        <div class="page" id="page-calendar">
+            <h2 style="font-size:18px; margin-bottom:2px;">📅 Календарь</h2>
+            <p class="page-subtitle">Все события СМУС в одном месте</p>
+            <div class="calendar-tabs">
+                <span class="tab active" onclick="switchCalendarTab('events', this)">📋 События</span>
+                <span class="tab" onclick="switchCalendarTab('webinars', this)">🎥 Вебинары</span>
+                <span class="tab" onclick="switchCalendarTab('reviews', this)">⭐ Отзывы</span>
+            </div>
+            <div class="calendar-tab-content active" id="calev">
+                <div class="calendar-grid">
+                    <div class="cal-item"><div class="day">28</div><div class="month">авг</div><div class="title">Хакатон</div><div class="type">🏆</div><button class="btn-sm" onclick="registerEvent()">Записаться</button><button class="btn-outlook" onclick="showToast('📅 Добавлено в Outlook')">📅 Outlook</button></div>
+                    <div class="cal-item"><div class="day">2</div><div class="month">сен</div><div class="title">Семинар</div><div class="type">🧪</div><button class="btn-sm" onclick="registerEvent()">Записаться</button></div>
+                    <div class="cal-item"><div class="day">10</div><div class="month">сен</div><div class="title">Заседание</div><div class="type">👥</div><button class="btn-sm" style="background:#2563eb;">Подключиться</button></div>
+                </div>
+            </div>
+            <div class="calendar-tab-content" id="calweb">
+                <div class="webinar-grid">
+                    <div class="webinar-card" onclick="showModal('🎥 Нейросети в НИОКР', 'Спикер: д.т.н. Иванов С.П.')"><span class="icon">🎥</span><h4>Нейросети в НИОКР</h4><div class="date">📅 5 сентября 2026</div></div>
+                </div>
+            </div>
+            <div class="calendar-tab-content" id="calrev">
+                <div class="review-item"><div class="avatar">АМ</div><div class="info"><h4>Анна М.</h4><div class="stars">⭐⭐⭐⭐⭐</div><p>Отличный хакатон!</p></div></div>
+            </div>
+        </div>
+
+        <!-- ===== БАНК ИДЕЙ ===== -->
+        <div class="page" id="page-ideas">
+            <h2 style="font-size:18px; margin-bottom:2px;">💡 Банк идей</h2>
+            <p class="page-subtitle">Полный жизненный цикл: подача → обсуждение → экспертиза → внедрение → награждение</p>
+            <div class="idea-form">
+                <h4 style="margin-bottom:6px; font-size:14px;">➕ Подать новую идею</h4>
+                <input type="text" placeholder="Название идеи" id="ideaTitle" value="Внедрение ИИ-помощника для заявок" />
+                <select id="ideaDirection"><option>Научно-техническое развитие</option><option selected>Технологическое развитие</option></select>
+                <textarea placeholder="Опишите суть идеи" id="ideaDesc">Предлагаю создать ИИ-модуль для автоматического оформления заявок.</textarea>
+                <button onclick="submitIdea()">🚀 Отправить идею</button>
+            </div>
+            <div class="idea-list" id="ideaList">
+                <div class="idea-item"><div class="idea-item-left"><span class="idea-like" onclick="toggleLike(this)">❤️</span><div><strong>ИИ-помощник для заявок</strong></div></div><span class="idea-status status-review">Экспертиза</span></div>
+            </div>
+        </div>
+
+        <!-- ===== ЧАТ ===== -->
+        <div class="page" id="page-chat">
+            <h2 style="font-size:18px; margin-bottom:10px;">💬 Чат СМУС</h2>
+            <div class="chat-container">
+                <div class="chat-channels">
+                    <div style="font-weight:600; font-size:11px; margin-bottom:3px;">📌 Каналы</div>
+                    <div class="channel active" onclick="switchChannel(this)"># Общий</div>
+                    <div class="channel" onclick="switchChannel(this)"># ДАСУ</div>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="msg"><span class="name">Анна М.</span> <span class="time">14:32</span><div>Кто будет на хакатоне?</div></div>
+                    <div class="chat-input"><input type="text" placeholder="Введите сообщение..." id="chatInput" onkeypress="if(event.key==='Enter') sendMessage()" /><button onclick="sendMessage()">➤</button></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== ГРАНТЫ ===== -->
+        <div class="page" id="page-grants">
+            <h2 style="font-size:18px; margin-bottom:2px;">🏆 Гранты и конкурсы</h2>
+            <p class="page-subtitle">Актуальные программы поддержки</p>
+            <div class="grants-grid">
+                <div class="grant-card"><span class="icon">🏆</span><h3>Конкурс инноваций ОПК</h3><div class="org">АО «ОПК»</div><div class="amount">до 500 000 ₽</div><div class="deadline">⏳ Дедлайн: 30 сен 2026</div><span class="status status-urgent">⚡ Срочно</span></div>
+                <div class="grant-card"><span class="icon">🏆</span><h3>Грант РНФ</h3><div class="org">Российский научный фонд</div><div class="amount">до 1 500 000 ₽</div><div class="deadline">⏳ Дедлайн: 15 окт 2026</div><span class="status status-open">✅ Открыт</span></div>
+            </div>
+        </div>
+
+        <!-- ===== СТИПЕНДИИ ===== -->
+        <div class="page" id="page-scholarships">
+            <h2 style="font-size:18px; margin-bottom:2px;">🎓 Стипендии</h2>
+            <p class="page-subtitle">Финансовая поддержка</p>
+            <div class="scholarship-grid">
+                <div class="scholarship-card"><span class="icon">🎓</span><h3>Стипендия Президента РФ</h3><div class="org">Правительство РФ</div><div class="amount">75 000 ₽/мес</div><div class="deadline">⏳ Дедлайн: 20 сен 2026</div><span class="status status-urgent">⚡ Срочно</span></div>
+                <div class="scholarship-card"><span class="icon">🎓</span><h3>Стипендия Правительства РФ</h3><div class="org">Правительство РФ</div><div class="amount">30 000 ₽/мес</div><div class="deadline">⏳ Дедлайн: круглогодично</div><span class="status status-open">✅ Открыта</span></div>
+            </div>
+        </div>
+
+        <!-- ===== БИБЛИОТЕКА ===== -->
+        <div class="page" id="page-library">
+            <h2 style="font-size:18px; margin-bottom:2px;">📚 Библиотека</h2>
+            <p class="page-subtitle">База знаний и обучение</p>
+            <div class="library-grid">
+                <div class="library-section">
+                    <h2>📖 Открытый доступ <span class="badge-free">Бесплатно</span></h2>
+                    <div class="library-item"><span class="icon">📘</span><div class="info"><h4>Положение о СМУС ДАСУ</h4><p>Основной документ</p></div><span class="action">Открыть</span></div>
+                    <div class="library-item"><span class="icon">📄</span><div class="info"><h4>Стратегия НТР РФ до 2035</h4><p>Ключевые направления</p></div><span class="action">Открыть</span></div>
+                </div>
+                <div class="library-section">
+                    <h2>🔒 По подписке <span class="badge-paid">200 баллов / 3 мес</span></h2>
+                    <div class="library-item"><span class="icon">📕</span><div class="info"><h4>ИИ для инженеров</h4><p>Полный курс</p></div><span class="action">200 баллов</span></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===== ФУТЕР ===== -->
+    <div class="footer">
+        Портал СМУС · АО «Системы управления» · Версия 0.22 (PoC) · 2026
+        <span style="margin-left:10px;">⭐ <span id="footerScore">248</span> баллов</span>
+        <span style="margin-left:10px; cursor:pointer;" onclick="showToast('🔍 Поиск')">🔍 Поиск</span>
+        <span style="margin-left:10px; cursor:pointer;" onclick="showToast('🔔 3 уведомления')">🔔 Уведомления</span>
+    </div>
+</div>
+
+<!-- ===== ОНБОРДИНГ ===== -->
+<div class="onboarding-overlay" id="onboardingOverlay">
+    <div class="onboarding-card" id="onboardingCard">
+        <div class="step-indicator" id="onboardingStep">Шаг 1 из 4</div>
+        <span class="icon" id="onboardingIcon">👋</span>
+        <h2 id="onboardingTitle">Привет! Это СМУС</h2>
+        <p id="onboardingDesc">Совет молодых учёных и специалистов — сообщество молодых инженеров и учёных пяти предприятий дивизиона АСУ. Здесь ты растёшь, реализуешь идеи и получаешь поддержку. Покажем, как всё устроено.</p>
+        <div class="dots" id="onboardingDots"><span class="active"></span><span></span><span></span><span></span></div>
+        <div class="btn-row"><button class="btn btn-primary" id="onboardingBtn">Далее</button></div>
+    </div>
+</div>
+
+<!-- ===== МОДАЛЬНОЕ ОКНО ===== -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this) closeModal()">
+    <div class="modal">
+        <div class="modal-icon" id="modalIcon">🎉</div>
+        <h3 id="modalTitle">Заголовок</h3>
+        <p id="modalDesc" style="white-space:pre-wrap;">Описание</p>
+        <div>
+            <button class="modal-btn" onclick="closeModal()">Закрыть</button>
+            <button class="modal-btn secondary" onclick="closeModal(); showToast('✅ Готово!');">Подтвердить</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ===== ИИ-ВИДЖЕТ ===== -->
+<button class="ai-toggle" id="aiToggle">🤖<span class="badge">3</span></button>
+<div class="ai-widget" id="aiWidget">
+    <div class="ai-header">
+        <div>🤖 ИИ-ассистент СМУС<div class="status"><span class="dot"></span> Онлайн · готов помочь</div></div>
+        <button class="close" id="aiClose">×</button>
+    </div>
+    <div class="ai-body">
+        <div class="ai-quick">
+            <button onclick="askAI('Какие мероприятия идут в ближайшее время?')">📅 Мероприятия</button>
+            <button onclick="askAI('Как подать идею?')">💡 Идеи</button>
+            <button onclick="askAI('Что такое КПЭ СМУС?')">📊 КПЭ</button>
+        </div>
+        <div class="ai-answer" id="aiAnswer">👋 Привет! Задай любой вопрос о СМУС.</div>
+        <div class="ai-suggestions">
+            <span class="suggestion" onclick="askAI('Что такое КПЭ СМУС?')">📊 КПЭ СМУС</span>
+        </div>
+        <div class="ai-input-row">
+            <input type="text" placeholder="Задайте вопрос..." id="aiInput" onkeypress="if(event.key==='Enter') askCustomQuestion()" />
+            <button onclick="askCustomQuestion()">➤</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ================================================================
+    // ===== СОСТОЯНИЕ =====
+    // ================================================================
+    let userScore = 248;
+    let communityCount = 6;
+    let ideaCount = 8;
+    let pathState = { step1: false, step2: false, step3: false, step4: false, step5: false };
+    let currentBISubpage = 'overview';
+
+    function loadPathState() {
+        try {
+            const saved = localStorage.getItem('smusPathState');
+            if (saved) { const parsed = JSON.parse(saved); pathState = { ...pathState, ...parsed }; }
+        } catch (e) {}
+    }
+    function savePathState() {
+        try { localStorage.setItem('smusPathState', JSON.stringify(pathState)); } catch (e) {}
+    }
+
+    // ================================================================
+    // ===== ПУТЬ НОВИЧКА =====
+    // ================================================================
+    function updatePathUI() {
+        const steps = document.querySelectorAll('.path-step');
+        const total = steps.length;
+        let completed = 0;
+        steps.forEach((step, index) => {
+            const key = `step${index + 1}`;
+            const isDone = pathState[key] || false;
+            if (isDone) {
+                step.classList.add('done');
+                step.querySelector('.step-check').textContent = '✓';
+                completed++;
+            } else {
+                step.classList.remove('done');
+                step.querySelector('.step-check').textContent = index + 1;
+            }
+        });
+        const progress = Math.round((completed / total) * 100);
+        document.getElementById('pathProgress').style.width = progress + '%';
+        document.getElementById('pathProgressText').textContent = progress + '%';
+        document.getElementById('pathBadge').textContent = `${completed} из ${total} шагов`;
+        if (completed === total) {
+            document.getElementById('pathBadge').classList.add('completed');
+            document.getElementById('pathBadge').textContent = '✅ Путь пройден! +20 баллов';
+        } else {
+            document.getElementById('pathBadge').classList.remove('completed');
+        }
+        savePathState();
+    }
+    function checkPathStep(stepKey) {
+        if (!pathState[stepKey]) {
+            pathState[stepKey] = true;
+            updatePathUI();
+            const allDone = Object.values(pathState).every(v => v === true);
+            if (allDone) {
+                updateScore(20);
+                showToast('🎉 Вы прошли «Путь новичка»! +20 баллов!');
+            } else {
+                showToast(`✅ Шаг пройден! Осталось ${Object.values(pathState).filter(v => !v).length} шагов`);
+            }
+        }
+    }
+    function markProfileStep() { checkPathStep('step1'); }
+    function markCommunityStep() { checkPathStep('step2'); }
+    function markEventStep() { checkPathStep('step3'); }
+    function markAIStep() { checkPathStep('step4'); }
+    function markIdeaStep() { checkPathStep('step5'); }
+
+    // ================================================================
+    // ===== ПЕРЕКЛЮЧАТЕЛЬ BI =====
+    // ================================================================
+    function switchBISubpage(subpage, btn) {
+        currentBISubpage = subpage;
+        document.querySelectorAll('.bi-switcher button').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        document.querySelectorAll('.bi-subpage').forEach(p => p.classList.remove('active'));
+        const target = document.getElementById('bi-subpage-' + subpage);
+        if (target) target.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ================================================================
+    // ===== ОНБОРДИНГ =====
+    // ================================================================
+    const onboardingSteps = [
+        { icon: '👋', title: 'Привет! Это СМУС', desc: 'Совет молодых учёных и специалистов — сообщество молодых инженеров и учёных пяти предприятий дивизиона АСУ.' },
+        { icon: '🎁', title: 'Что ты получишь', desc: 'Стипендии и гранты, реальные проекты и кадровый резерв, признание и баллы, наставников и единомышленников.' },
+        { icon: '⚡', title: 'Как это работает', desc: 'Ты участвуешь в мероприятиях, подаёшь идеи, вступаешь в сообщества — и получаешь баллы.' },
+        { icon: '🚀', title: 'С чего начать', desc: 'Мы подготовили «Путь новичка» — 5 простых шагов с наградами.' }
+    ];
+    function renderOnboardingStep(index) {
+        const step = onboardingSteps[index];
+        document.getElementById('onboardingStep').textContent = `Шаг ${index + 1} из ${onboardingSteps.length}`;
+        document.getElementById('onboardingIcon').textContent = step.icon;
+        document.getElementById('onboardingTitle').textContent = step.title;
+        document.getElementById('onboardingDesc').textContent = step.desc;
+        const dots = document.querySelectorAll('#onboardingDots span');
+        dots.forEach((dot, i) => { dot.classList.toggle('active', i === index); });
+        const btn = document.getElementById('onboardingBtn');
+        if (index === onboardingSteps.length - 1) {
+            btn.textContent = '🚀 Начать путь';
+            btn.onclick = function() {
+                document.getElementById('onboardingOverlay').classList.remove('open');
+                localStorage.setItem('smusOnboardingDone', 'true');
+                showToast('🚀 Добро пожаловать! Пройди «Путь новичка» на главной!');
+            };
+        } else {
+            btn.textContent = 'Далее';
+            btn.onclick = function() { renderOnboardingStep(index + 1); };
+        }
+    }
+    function showOnboarding() {
+        const overlay = document.getElementById('onboardingOverlay');
+        if (overlay) { overlay.classList.add('open'); renderOnboardingStep(0); }
+    }
+
+    // ================================================================
+    // ===== ОБНОВЛЕНИЕ БАЛЛОВ =====
+    // ================================================================
+    function updateScore(points) {
+        userScore += points;
+        document.getElementById('userScore').textContent = userScore;
+        document.getElementById('footerScore').textContent = userScore;
+        document.querySelectorAll('#statScore .num').forEach(el => el.textContent = userScore);
+    }
+
+    // ================================================================
+    // ===== НАВИГАЦИЯ =====
+    // ================================================================
+    const navLinks = document.querySelectorAll('#mainNav a[data-page]');
+    const pages = {
+        home: document.getElementById('page-home'),
+        dashboard: document.getElementById('page-dashboard'),
+        calendar: document.getElementById('page-calendar'),
+        'member-profile': document.getElementById('page-member-profile'),
+        ideas: document.getElementById('page-ideas'),
+        chat: document.getElementById('page-chat'),
+        communities: document.getElementById('page-communities'),
+        library: document.getElementById('page-library'),
+        grants: document.getElementById('page-grants'),
+        scholarships: document.getElementById('page-scholarships'),
+        analytics: document.getElementById('page-analytics')
+    };
+    function navigateTo(pageId) {
+        Object.values(pages).forEach(p => { if (p) p.classList.remove('active'); });
+        if (pages[pageId]) pages[pageId].classList.add('active');
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.dataset.page === pageId) link.classList.add('active');
+        });
+        document.getElementById('aiWidget').classList.remove('open');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            navigateTo(link.dataset.page);
+        });
+    });
+
+    // ================================================================
+    // ===== ПРОФИЛЬ (вкладки) =====
+    // ================================================================
+    function switchProfileTab(tab, el) {
+        let containerId = '';
+        if (tab.startsWith('dash-')) containerId = '#page-dashboard';
+        else if (tab.startsWith('member-')) containerId = '#page-member-profile';
+        const container = document.querySelector(containerId);
+        if (!container) return;
+        container.querySelectorAll('.profile-tabs .tab').forEach(t => t.classList.remove('active'));
+        if (el) el.classList.add('active');
+        container.querySelectorAll('.profile-tab-content').forEach(c => c.classList.remove('active'));
+        const target = document.getElementById('tab-' + tab);
+        if (target) target.classList.add('active');
+    }
+
+    // ================================================================
+    // ===== ПРОФИЛЬ ЧЛЕНА СМУС =====
+    // ================================================================
+    function searchMember() {
+        const input = document.getElementById('memberSearchInput');
+        if (!input || !input.value.trim()) { showToast('⚠️ Введите имя для поиска'); return; }
+        showToast(`🔍 Поиск: "${input.value.trim()}"...`);
+    }
+    function searchMemberFromCommunities() {
+        const input = document.getElementById('commMemberSearch');
+        if (!input || !input.value.trim()) { showToast('⚠️ Введите имя для поиска'); return; }
+        showToast(`🔍 Поиск: "${input.value.trim()}"...`);
+        setTimeout(() => {
+            navigateTo('member-profile');
+            showToast('👤 Открыт профиль участника');
+        }, 800);
+    }
+    function openMemberProfile(name, position, org, initials) {
+        showToast(`👤 Открыт профиль: ${name}`);
+        const profileSidebar = document.querySelector('#page-member-profile .profile-sidebar');
+        if (profileSidebar) {
+            const avatar = profileSidebar.querySelector('.avatar-big');
+            const h3 = profileSidebar.querySelector('h3');
+            const positions = profileSidebar.querySelectorAll('.position');
+            const division = profileSidebar.querySelector('.division');
+            if (avatar) avatar.textContent = initials;
+            if (h3) h3.textContent = name;
+            if (positions.length >= 1) positions[0].textContent = position;
+            if (positions.length >= 2) positions[1].textContent = '';
+            if (division) division.textContent = '🏢 ' + org;
+        }
+        navigateTo('member-profile');
+    }
+
+    // ================================================================
+    // ===== КАЛЕНДАРЬ (вкладки) =====
+    // ================================================================
+    function switchCalendarTab(tab, el) {
+        document.querySelectorAll('.calendar-tabs .tab').forEach(t => t.classList.remove('active'));
+        if (el) el.classList.add('active');
+        document.querySelectorAll('.calendar-tab-content').forEach(c => c.classList.remove('active'));
+        const id = tab === 'events' ? 'calev' : tab === 'webinars' ? 'calweb' : 'calrev';
+        const target = document.getElementById(id);
+        if (target) target.classList.add('active');
+    }
+
+    // ================================================================
+    // ===== МОДАЛЬНОЕ ОКНО =====
+    // ================================================================
+    function showModal(title, desc, icon = '🎉') {
+        document.getElementById('modalIcon').textContent = icon;
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalDesc').textContent = desc;
+        document.getElementById('modalOverlay').classList.add('open');
+    }
+    function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+    // ================================================================
+    // ===== TOAST =====
+    // ================================================================
+    let toastTimeout;
+    function showToast(message, duration = 3500) {
+        const toast = document.getElementById('toast');
+        if (!toast) return;
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => toast.classList.remove('show'), duration);
+    }
+
+    // ================================================================
+    // ===== BI ФИЛЬТРЫ =====
+    // ================================================================
+    function applyFilters() {
+        const period = document.getElementById('filterPeriod').value;
+        const division = document.getElementById('filterDivision').value;
+        const company = document.getElementById('filterCompany').value;
+        const status = document.getElementById('filterStatus').value;
+        const search = document.getElementById('filterSearch').value;
+        showToast(`🔍 Фильтры: период=${period}, дивизион=${division}, предприятие=${company}, статус=${status}${search ? ', поиск: ' + search : ''}`);
+    }
+    function resetFilters() {
+        document.getElementById('filterPeriod').value = 'h1-2026';
+        document.getElementById('filterDivision').value = 'asu';
+        document.getElementById('filterCompany').value = 'su';
+        document.getElementById('filterStatus').value = 'board';
+        document.getElementById('filterSearch').value = '';
+        showToast('🔄 Фильтры сброшены');
+    }
+
+    // ================================================================
+    // ===== ИДЕИ =====
+    // ================================================================
+    function toggleLike(el) {
+        el.classList.toggle('liked');
+        if (el.classList.contains('liked')) { showToast('❤️ +2 балла'); updateScore(2); }
+        else { showToast('😊 Поддержка убрана'); updateScore(-2); }
+    }
+    function submitIdea() {
+        const title = document.getElementById('ideaTitle');
+        const direction = document.getElementById('ideaDirection');
+        const desc = document.getElementById('ideaDesc');
+        if (!title.value || !desc.value) { showToast('⚠️ Заполните поля'); return; }
+        showModal('✅ Идея подана!', `"${title.value}"\n\n+10 баллов!`, '💡');
+        updateScore(10);
+        ideaCount++;
+        document.querySelectorAll('#statIdeas .num').forEach(el => el.textContent = ideaCount);
+        markIdeaStep();
+    }
+
+    // ================================================================
+    // ===== МЕРОПРИЯТИЯ =====
+    // ================================================================
+    function registerEvent() {
+        showToast('✅ Вы зарегистрированы!');
+        markEventStep();
+        updateScore(5);
+    }
+
+    // ================================================================
+    // ===== СООБЩЕСТВА =====
+    // ================================================================
+    function joinCommunity(btn, points) {
+        if (btn.classList.contains('joined')) { showToast('⚠️ Вы уже вступили'); return; }
+        btn.classList.add('joined');
+        btn.textContent = '✅ Вступили';
+        communityCount++;
+        updateScore(points);
+        showToast(`✅ Вступили! +${points} балла`);
+        document.querySelectorAll('#statCommunities .num').forEach(el => el.textContent = communityCount);
+        markCommunityStep();
+    }
+    function switchCommunityTab(tab, el) {
+        document.querySelectorAll('#page-communities .tabs .tab').forEach(t => t.classList.remove('active'));
+        if (el) el.classList.add('active');
+        document.querySelectorAll('#page-communities .community-tab-content').forEach(c => c.style.display = 'none');
+        let targetId = '';
+        if (tab === 'member-profile') targetId = 'communitiesMemberProfile';
+        else if (tab === 'groups') targetId = 'communitiesGroups';
+        else if (tab === 'members') targetId = 'communitiesMembers';
+        const elTarget = document.getElementById(targetId);
+        if (elTarget) elTarget.style.display = 'block';
+    }
+
+    // ================================================================
+    // ===== ИНТЕРЕСЫ =====
+    // ================================================================
+    function toggleInterest(el, isActive) {
+        el.classList.toggle('active');
+        if (el.classList.contains('active')) { showToast(`✅ Добавлен: ${el.textContent}`); markProfileStep(); }
+        else { showToast(`❌ Убран: ${el.textContent}`); }
+    }
+
+    // ================================================================
+    // ===== ОПРОС =====
+    // ================================================================
+    function votePoll(el, id) {
+        const options = document.querySelectorAll('.poll-options .option');
+        options.forEach(opt => {
+            const fill = opt.querySelector('.bar .fill');
+            const perc = opt.querySelector('.perc');
+            if (opt === el) {
+                const current = parseInt(perc.textContent) || 0;
+                const newVal = Math.min(current + 5, 100);
+                if (fill) fill.style.width = newVal + '%';
+                if (perc) perc.textContent = newVal + '%';
+            } else {
+                const current = parseInt(perc.textContent) || 0;
+                const newVal = Math.max(current - 2, 0);
+                if (fill) fill.style.width = newVal + '%';
+                if (perc) perc.textContent = newVal + '%';
+            }
+        });
+        showToast('✅ Спасибо за голос!');
+    }
+
+    // ================================================================
+    // ===== ЧАТ =====
+    // ================================================================
+    function sendMessage() {
+        const input = document.getElementById('chatInput');
+        if (!input) return;
+        const text = input.value.trim();
+        if (!text) return;
+        const container = document.getElementById('chatMessages');
+        const msg = document.createElement('div');
+        msg.className = 'msg';
+        msg.style.borderLeft = '4px solid #2563eb';
+        msg.innerHTML = `<span class="name">Вы (Анастасия)</span> <span class="time">${new Date().toLocaleTimeString('ru', {hour:'2-digit', minute:'2-digit'})}</span><div>${text}</div>`;
+        container.insertBefore(msg, container.lastElementChild);
+        input.value = '';
+        showToast('💬 Сообщение отправлено');
+        updateScore(1);
+    }
+    function switchChannel(el) {
+        document.querySelectorAll('.chat-channels .channel').forEach(c => c.classList.remove('active'));
+        el.classList.add('active');
+        showToast(`📌 Перешли в ${el.textContent.trim()}`);
+    }
+
+    // ================================================================
+    // ===== ОБМЕН БАЛЛОВ =====
+    // ================================================================
+    function exchangePoints(cost, item) {
+        if (userScore < cost) { showToast(`⚠️ Не хватает! Нужно ${cost}, у вас ${userScore}`); return; }
+        updateScore(-cost);
+        showToast(`🎉 Обменяли ${cost} баллов на ${item}!`);
+    }
+
+    // ================================================================
+    // ===== FAQ =====
+    // ================================================================
+    function toggleFaq(el) {
+        const answer = el.nextElementSibling;
+        const arrow = el.querySelector('.arrow');
+        if (answer) answer.classList.toggle('open');
+        if (arrow) arrow.classList.toggle('open');
+    }
+
+    // ================================================================
+    // ===== ИИ-АССИСТЕНТ =====
+    // ================================================================
+    const aiToggle = document.getElementById('aiToggle');
+    const aiWidget = document.getElementById('aiWidget');
+    const aiClose = document.getElementById('aiClose');
+    let aiMessageCount = 0;
+
+    function openAI() {
+        if (aiWidget) {
+            aiWidget.classList.add('open');
+            const badge = document.querySelector('.ai-toggle .badge');
+            if (badge) badge.style.display = 'none';
+            markAIStep();
+        }
+    }
+    aiToggle.addEventListener('click', () => {
+        aiWidget.classList.toggle('open');
+        if (aiWidget.classList.contains('open')) {
+            const badge = document.querySelector('.ai-toggle .badge');
+            if (badge) badge.style.display = 'none';
+            markAIStep();
+        }
+    });
+    aiClose.addEventListener('click', () => aiWidget.classList.remove('open'));
+
+    function askAI(question) {
+        const answerBox = document.getElementById('aiAnswer');
+        if (!answerBox) return;
+        const answers = {
+            'Какие мероприятия идут в ближайшее время?': '📅 Ближайшие:\n• Хакатон — 28 авг\n• Семинар ИИ — 2 сен\n• Заседание СМУС — 10 сен',
+            'Как подать идею?': '💡 Перейдите в «Идеи», заполните форму. +10 баллов!',
+            'Что такое КПЭ СМУС?': '📊 КПЭ СМУС — утверждённые показатели эффективности. Смотрите подробный дашборд в разделе BI → вкладка «BI Аналитика КПЭ СМУС».'
+        };
+        const defaultAnswer = '🤔 Ищу ответ.';
+        answerBox.innerHTML = '🤔 Думаю...';
+        setTimeout(() => {
+            answerBox.textContent = answers[question] || defaultAnswer;
+            aiMessageCount++;
+            markAIStep();
+        }, 700);
+    }
+    function askCustomQuestion() {
+        const input = document.getElementById('aiInput');
+        if (!input) return;
+        const question = input.value.trim();
+        if (!question) return;
+        askAI(question);
+        input.value = '';
+        showToast('🤖 ИИ обрабатывает запрос...');
+    }
+
+    // ================================================================
+    // ===== ДАТА =====
+    // ================================================================
+    function updateDate() {
+        const now = new Date();
+        const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        const dateStr = now.toLocaleDateString('ru-RU', options);
+        const el = document.getElementById('todayDate');
+        if (el) el.textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+    }
+
+    // ================================================================
+    // ===== ИНИЦИАЛИЗАЦИЯ =====
+    // ================================================================
+    localStorage.removeItem('smusOnboardingDone');
+    localStorage.removeItem('smusPathState');
+    pathState = { step1: false, step2: false, step3: false, step4: false, step5: false };
+    loadPathState();
+    updatePathUI();
+
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(showOnboarding, 400);
+        updateDate();
+    });
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        setTimeout(showOnboarding, 300);
+        updateDate();
+    }
+
+    document.getElementById('footerScore').textContent = userScore;
+    console.log('Портал СМУС v0.22 загружен');
+    console.log('✅ В шапке: "Портал СМУС" с буквой "С"');
+</script>
+
+</body>
+</html>
